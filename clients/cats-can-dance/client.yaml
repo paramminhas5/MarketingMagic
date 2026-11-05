@@ -1,0 +1,43 @@
+# Cats Can Dance · culture, music, events and pet-lifestyle platform.
+slug: cats-can-dance
+name: Cats Can Dance
+url: https://catscandance.com
+playbook: creator_media
+description: >
+  Cats Can Dance (CCD) is a Bengaluru culture platform spanning underground electronic music,
+  events and pet lifestyle. It runs the CCD x Social recurring pet-friendly music event series
+  at Social BLR, keeps an artist directory with artist portfolios, a scraper of gigs across
+  Indian ticketing sites, an events recommendation engine and a fan XP system, and is building
+  CCD School, a gamified Ableton Live learning platform. Founder Param Minhas has a ~150k-follower
+  social page he is converting into a CCD audience with daily music content.
+geo: [Bengaluru, India]
+icp: >
+  DRAFT: 21-35 year-old gig-goers in Bengaluru into electronic and underground music, design and
+  pets; plus producers and DJs (Indian and touring) who want gigs, profiles and to learn production.
+offers:
+  - name: CCD x Social event tickets
+    description: Recurring pet-friendly music nights at Social BLR with local and touring artists.
+  - name: CCD School
+    description: Gamified Ableton Live learning with missions, simulators, XP and streaks.
+  - name: Artist profiles
+    description: Free artist portfolios artists can claim to get discovered and booked.
+competitors: []
+voices:
+  - id: param
+    name: Param Minhas
+    role: Founder of Cats Can Dance; producer/DJ (Merman); co-founder of SoleSearch
+    channels: [instagram, linkedin]
+    rules:
+      - Plain and straightforward; sounds like Param, not over the top
+      - Never use em dashes
+      - Cut any line that exists to sound good rather than say something
+brand:
+  tone: Playful, underground, brutalist; dry humour; music-first
+  rules:
+    - Visual identity is a brutalist isometric cat world; mascot is a black line-art cat in a top hat, mid-dance
+    - Never use em dashes in copy
+  banned: []
+  colors: ["#1f3bff", "#b6ff00", "#ff2bd6", "#111111", "#f4efe1"]
+accounts: {}
+constraints: []
+currency: INR

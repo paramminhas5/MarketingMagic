@@ -1,0 +1,29 @@
+{
+  "name": "marketingmagic",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A multi-client marketing engine: standalone products that research, plan, create, distribute, convert and learn.",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "products/*",
+    "engine"
+  ],
+  "bin": {
+    "mm": "./bin/mm.js"
+  },
+  "scripts": {
+    "mm": "tsx engine/src/cli.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "skills": "tsx engine/src/cli.ts skills",
+    "test": "tsx engine/test/smoke.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

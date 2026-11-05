@@ -1,0 +1,14 @@
+# mm campaign clients/<slug>/briefs/example.yaml
+campaign: launch-q1
+objective: 200 qualified leads in 30 days
+offer: Free audit for the first 20 sign-ups
+calendar: Launch event on the 15th
+studio:
+  count: 15
+voice:
+  voice: founder
+  channel: linkedin
+  count: 3
+pages:
+  offer: Free audit
+  source: meta

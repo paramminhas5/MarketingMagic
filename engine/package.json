@@ -1,0 +1,24 @@
+{
+  "name": "@mm/engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/registry.ts",
+  "dependencies": {
+    "@mm/core": "*",
+    "@mm/scout": "*",
+    "@mm/strategist": "*",
+    "@mm/architect": "*",
+    "@mm/studio": "*",
+    "@mm/voice": "*",
+    "@mm/social": "*",
+    "@mm/search": "*",
+    "@mm/pages": "*",
+    "@mm/media-buyer": "*",
+    "@mm/hunter": "*",
+    "@mm/lifecycle": "*",
+    "@mm/lead-desk": "*",
+    "@mm/gatekeeper": "*",
+    "@mm/analyst": "*"
+  }
+}

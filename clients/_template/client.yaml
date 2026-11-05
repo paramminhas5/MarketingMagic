@@ -1,0 +1,35 @@
+# Client profile. Every product reads this. Keep it factual: products are told
+# never to claim anything that isn't here or in the evidence.
+slug: template
+name: Client name
+url: https://example.com
+# consumer | b2b_service | creator_media  (picks the default playbook)
+playbook: consumer
+description: >
+  One paragraph: what they sell, to whom, why it's different. Plain words.
+geo: [Bengaluru, India]
+icp: >
+  Best-fit customer, as specifically as you can. Scout and Strategist will sharpen it.
+offers:
+  - name: Main offer
+    price: "₹0"
+    description: What the buyer gets.
+# URLs or names. Scout discovers more.
+competitors: []
+# Named people the engine can write for. Anything in their voice always needs their approval.
+voices:
+  - id: founder
+    name: Founder Name
+    role: Founder
+    channels: [linkedin, instagram]
+    rules:
+      - Plain and direct, first person
+brand:
+  tone: Direct, specific, a little irreverent
+  rules: []
+  banned: []
+  colors: ["#111111", "#f2efe6"]
+# Platform account ids, e.g. meta_ad_account: act_123, ig_user: 1789...
+accounts: {}
+constraints: []
+currency: INR

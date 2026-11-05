@@ -1,0 +1,15 @@
+# Fill in the real details, then: mm campaign clients/cats-can-dance/briefs/next-event.yaml
+campaign: ccd-social-next
+objective: Sell out the next CCD x Social night
+offer: "TODO: date, lineup, ticket price, ticket link"
+calendar: "TODO: event date and lineup announcement dates"
+studio:
+  count: 15
+  formats: [static, video, carousel, founder_talking_head, ugc_script]
+voice:
+  voice: param
+  channel: instagram
+  count: 3
+pages:
+  offer: "TODO: ticket offer"
+  source: meta

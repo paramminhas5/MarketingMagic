@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.local
+.mm/
+*.log
+.DS_Store
+# per-client runtime data stays local unless you choose to commit it
+clients/*/data/
+clients/*/out/pending/
+!clients/_template/**

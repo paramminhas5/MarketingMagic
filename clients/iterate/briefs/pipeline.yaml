@@ -1,0 +1,12 @@
+# mm campaign clients/iterate/briefs/pipeline.yaml
+campaign: iterate-pipeline
+objective: 10 qualified discovery calls a month
+offer: AI Visibility audit
+voice:
+  voice: param
+  channel: linkedin
+  count: 3
+pages:
+  offer: AI Visibility audit
+  source: linkedin
+products: [voice, search, hunter, lifecycle]
