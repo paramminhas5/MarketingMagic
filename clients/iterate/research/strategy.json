@@ -1,0 +1,189 @@
+{
+  "positioning": {
+    "competitiveAlternatives": [
+      "Keep the existing SEO agency and add their new GEO add-on",
+      "Buy a GEO tracking tool (e.g. Writesonic) and run it in-house",
+      "Hire a large full-service agency (Schbang-style) with a developing GEO practice",
+      "Do nothing and hope AI answers pick the brand up"
+    ],
+    "uniqueAttributes": [
+      "Operator-led: founded by Param Minhas, 15+ years across AI, marketing, venture and consumer startups, co-founder of SoleSearch",
+      "Small AI-augmented pods instead of headcount",
+      "Five layers in one team: discovery (AI answers and search), capture (clipping, UGC, social, priced on outcomes), organic, paid, community (recurring offline events)",
+      "Own frameworks: AI Visibility Architecture (AVA) and GEO/AEO, plus structured data and llms.txt builds"
+    ],
+    "value": [
+      "Brands get found and trusted in AI answers, with citations shown, not traffic charts",
+      "Findings get executed by the same team, across search, social, paid and community",
+      "Senior operator attention without enterprise-agency overhead"
+    ],
+    "bestFitCustomer": "Founders and marketing heads of culture-led Indian consumer brands (D2C, lifestyle, travel, mobility, apparel) that already spend on marketing, care how they show up in AI answers, and want an operator-led team that ships.",
+    "marketCategory": "AI visibility and growth pods",
+    "statement": "For culture-led consumer brands in India, Iterate is the AI visibility and growth pod that gets you cited in AI answers and then does the work across search, social, paid and community, run by operators rather than account managers."
+  },
+  "motivations": [
+    {
+      "id": "invisible-in-ai",
+      "name": "You're invisible where buyers now ask",
+      "insight": "Brands don't know if ChatGPT, Perplexity, Gemini or AI Overviews mention them, and suspect they don't",
+      "proofPoints": [
+        "Free AI answer check on 10 buyer questions",
+        "AVA framework"
+      ],
+      "segments": [
+        "Marketing heads",
+        "Founders"
+      ]
+    },
+    {
+      "id": "proof-not-pitch",
+      "name": "Proof over pitch",
+      "insight": "Buyers are told to demand real AI citations, and most agencies show traffic instead",
+      "proofPoints": [
+        "Citation-first reporting: dated before/after AI answers",
+        "Case studies described generically under NDA"
+      ],
+      "segments": [
+        "Marketing heads"
+      ]
+    },
+    {
+      "id": "doers-not-auditors",
+      "name": "Execution, not another audit",
+      "insight": "GEO vendors measure; brands need someone who fixes and ships",
+      "proofPoints": [
+        "Five layers in one pod",
+        "Structured data and llms.txt builds"
+      ],
+      "segments": [
+        "Founders",
+        "Marketing heads"
+      ]
+    },
+    {
+      "id": "operator-led",
+      "name": "Operators, not account managers",
+      "insight": "Growth-stage founders trust people who have built brands themselves",
+      "proofPoints": [
+        "Param co-founded SoleSearch",
+        "15+ years across AI, marketing, venture and consumer"
+      ],
+      "segments": [
+        "Founders"
+      ]
+    },
+    {
+      "id": "culture-led-growth",
+      "name": "Growth through culture and community",
+      "insight": "Culture brands grow through creators, community and events, which most GEO agencies don't touch",
+      "proofPoints": [
+        "Community layer runs recurring offline events",
+        "Capture layer priced on outcomes"
+      ],
+      "segments": [
+        "Founders of lifestyle and culture brands"
+      ]
+    }
+  ],
+  "offers": [
+    {
+      "name": "AI Answer Check (free)",
+      "hypothesis": "A free, concrete check of how the brand shows up for 10 buyer questions books discovery calls better than a generic audit offer",
+      "structure": "Prospect submits brand and 3 competitors; Iterate runs 10 buyer questions through ChatGPT, Perplexity and Gemini and sends a one-page result with screenshots within 48 hours",
+      "risk": "Manual effort per lead; mitigate by templating with the engine"
+    },
+    {
+      "name": "90-day AI visibility pilot",
+      "hypothesis": "A fixed 3-month pilot matches how buyers are being told to buy GEO and lowers the commitment barrier",
+      "structure": "Audit plus fixes plus citation seeding for 90 days at a fixed monthly fee, with a dated citation report at days 0, 45 and 90",
+      "risk": "Citation gains may take longer than 90 days for some categories"
+    },
+    {
+      "name": "Growth pod",
+      "hypothesis": "Pilot clients convert to a pod once they see citations move",
+      "structure": "Monthly pod across the five layers; capture priced on outcomes",
+      "risk": "Scope creep across five layers for a small team"
+    }
+  ],
+  "channels": [
+    {
+      "channel": "Founder LinkedIn (Param, organic)",
+      "role": "demand",
+      "budgetShare": 0,
+      "kpi": "Saves, profile visits, inbound DMs",
+      "cadence": "3 posts a week, 1 document post, 1 newsletter a month"
+    },
+    {
+      "channel": "LinkedIn Thought Leader Ads on best posts",
+      "role": "demand",
+      "budgetShare": 0.6,
+      "kpi": "Landing-page click cost and AI Answer Check requests",
+      "cadence": "Always on, refresh weekly"
+    },
+    {
+      "channel": "Signal-based outbound (Clay + Apollo)",
+      "role": "capture",
+      "budgetShare": 0,
+      "kpi": "Positive reply rate (target 1-2%+) and calls booked",
+      "cadence": "Weekdays, 15-25 sends per mailbox per day after warm-up"
+    },
+    {
+      "channel": "GEO on own site + citation surfaces (directories, trade press, LinkedIn articles)",
+      "role": "demand",
+      "budgetShare": 0,
+      "kpi": "Brand cited for 'GEO agency India' prompts",
+      "cadence": "Monthly pages, weekly citation check"
+    },
+    {
+      "channel": "Google Search on commercial GEO queries",
+      "role": "capture",
+      "budgetShare": 0.4,
+      "kpi": "Cost per AI Answer Check request",
+      "cadence": "Always on, small budget"
+    },
+    {
+      "channel": "AI Answer Check landing page + Lead Desk",
+      "role": "convert",
+      "budgetShare": 0,
+      "kpi": "Request-to-call rate",
+      "cadence": "Reply within 10 minutes"
+    },
+    {
+      "channel": "Email nurture (results, then pilot offer)",
+      "role": "retain",
+      "budgetShare": 0,
+      "kpi": "Call bookings from nurture",
+      "cadence": "Event-driven"
+    }
+  ],
+  "primaryMetric": {
+    "name": "Qualified discovery calls booked per month",
+    "target": "10"
+  },
+  "tests": [
+    {
+      "hypothesis": "The free AI Answer Check gets more calls than a generic 'book a call' CTA",
+      "metric": "Calls booked per 100 landing-page visitors",
+      "minSample": "300 visitors per arm",
+      "killRule": "If the check converts below the call CTA after 300 visitors per arm, drop it"
+    },
+    {
+      "hypothesis": "'Proof over pitch' framing beats 'invisible in AI' framing in TLAs",
+      "metric": "Landing-page click cost",
+      "minSample": "30 landing-page clicks per arm",
+      "killRule": "Pause the losing motivation after 2x the other's cost at 30 clicks"
+    },
+    {
+      "hypothesis": "Outbound triggered by a new marketing leader or recent funding replies better than static lists",
+      "metric": "Positive reply rate",
+      "minSample": "200 contacts per segment",
+      "killRule": "Stop a segment under 1% positive replies at 200 contacts"
+    }
+  ],
+  "risks": [
+    "No public, nameable case studies (NDA): proof has to come from dated citation screenshots and generic descriptions",
+    "Category is crowded with self-published rankings; Iterate needs to appear on those citation surfaces",
+    "Iterate's own AI and search visibility is unmeasured (Ahrefs plan insufficient)",
+    "Founder time is the bottleneck for LinkedIn and sales calls"
+  ]
+}

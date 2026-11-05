@@ -1,0 +1,225 @@
+{
+  "summary": "Bengaluru's underground electronic scene is busy and paid-social heavy: promoters like Bloom In Green, Oddvision, Sort My Scene and Echonyx run specific, fact-led Meta ads (artist origin, label credits, set times, venue, price), usually several variants of one promise. Pet events are also plentiful but are daytime, family or wellness formats. Nobody found pairs pets with underground music, which is CCD x Social's whole idea. Discovery runs through ticketing apps (District, Insider, HighApe, SortMyScene, Skillboxes), which creates a gap CCD's artist directory and gig scraper can fill.",
+  "category": "Underground music nights and culture platform, Bengaluru",
+  "competitors": [
+    {
+      "name": "Bloom In Green Festival",
+      "angle": "Curated minimal/psy nights with touring artists, sold on credibility and specifics",
+      "strengths": [
+        "Fact-led copy: artist origin, labels, set times",
+        "Festival credibility references (Fusion, Universo Paralello, Boom)",
+        "Clear early-bird pricing (₹1,119 + GST)"
+      ],
+      "weaknesses": [
+        "Variants repeat one promise (low motivation diversity)"
+      ],
+      "channels": [
+        "Meta ads",
+        "Instagram"
+      ]
+    },
+    {
+      "name": "Oddvision",
+      "angle": "Brings international acts for India debuts",
+      "strengths": [
+        "'India debut' scarcity"
+      ],
+      "weaknesses": [
+        "Artist-dependent; each event starts from zero"
+      ],
+      "channels": [
+        "Meta ads"
+      ]
+    },
+    {
+      "name": "Sort My Scene",
+      "url": "https://sortmyscene.com",
+      "angle": "Ticketing platform running ads for promoters' nights (techno, hard techno, melodic house)",
+      "strengths": [
+        "Distribution for many promoters",
+        "Genre-tagged listings"
+      ],
+      "weaknesses": [
+        "Platform voice, not a community"
+      ],
+      "channels": [
+        "Meta ads",
+        "ticketing app"
+      ]
+    },
+    {
+      "name": "Echonyx Events",
+      "angle": "Pan-India DJ nights",
+      "strengths": [
+        "Multi-city footprint"
+      ],
+      "weaknesses": [
+        "Generic positioning"
+      ],
+      "channels": [
+        "Meta ads"
+      ]
+    },
+    {
+      "name": "skip-a-beat, Paradox, Kitty Su, Underground Madness and similar promoters",
+      "angle": "Recurring club nights at Bengaluru venues",
+      "strengths": [
+        "Established crowds and venue relationships"
+      ],
+      "weaknesses": [
+        "Discovery depends on ticketing apps and Instagram"
+      ],
+      "channels": [
+        "District",
+        "Insider",
+        "Instagram"
+      ]
+    },
+    {
+      "name": "Pet events (Pawsome Party, Paws on Table, Pawfest, Wooofstock, Pupper Pool Day Out, Petcom)",
+      "angle": "Daytime pet socials, pet yoga, pool days, cause events",
+      "strengths": [
+        "Proven demand for pet-friendly outings in Bengaluru",
+        "Listed on District, Insider, HighApe"
+      ],
+      "weaknesses": [
+        "No music-led or night-culture format found"
+      ],
+      "channels": [
+        "District",
+        "Insider",
+        "HighApe",
+        "Instagram"
+      ]
+    }
+  ],
+  "audience": [
+    {
+      "segment": "Underground electronic gig-goers in Bengaluru (21+)",
+      "pains": [
+        "Finding the good nights among many listings",
+        "Touring sets are expensive and one-off"
+      ],
+      "desires": [
+        "Live and touring sets with credible artists",
+        "A crowd that is there for the music"
+      ],
+      "objections": [
+        "Price",
+        "Commercial or 'luxury club' vibes"
+      ],
+      "whereTheyAre": [
+        "Instagram",
+        "District",
+        "Insider",
+        "SortMyScene",
+        "Skillboxes"
+      ]
+    },
+    {
+      "segment": "Pet owners in Bengaluru who go out",
+      "pains": [
+        "Pet events are mostly daytime and family-style"
+      ],
+      "desires": [
+        "Social outings where their pet is welcome"
+      ],
+      "objections": [
+        "Is a music night safe and comfortable for pets?"
+      ],
+      "whereTheyAre": [
+        "Instagram pet communities",
+        "District and Insider pet listings"
+      ]
+    },
+    {
+      "segment": "Producers and DJs (local and touring)",
+      "pains": [
+        "Getting gigs",
+        "Being discovered"
+      ],
+      "desires": [
+        "Profiles that get them booked",
+        "Learning production"
+      ],
+      "objections": [
+        "Another platform to maintain"
+      ],
+      "whereTheyAre": [
+        "Instagram",
+        "SoundCloud/Mixcloud",
+        "WhatsApp groups"
+      ]
+    }
+  ],
+  "languageBank": [
+    {
+      "phrase": "Been waiting for minimal techno played live in Bengaluru?",
+      "source": "Bloom In Green Festival Meta ad, Nov 2026"
+    },
+    {
+      "phrase": "Minimal techno, played live, for two hours.",
+      "source": "Bloom In Green Festival Meta ad, Nov 2026"
+    },
+    {
+      "phrase": "India Debut Tickets",
+      "source": "Oddvision Meta ad, Nov 2026"
+    },
+    {
+      "phrase": "a day out with pets for a cause",
+      "source": "Pawfest 2025 listing, Explocity"
+    },
+    {
+      "phrase": "Pan-India DJ Nights",
+      "source": "Echonyx Events Meta ad, Nov 2026"
+    }
+  ],
+  "searchLandscape": {
+    "commercialQueries": [
+      "pet friendly events Bangalore",
+      "techno events Bangalore this weekend",
+      "underground parties Bangalore",
+      "dog friendly bars Bangalore",
+      "learn Ableton online India"
+    ],
+    "aiAnswerGaps": [
+      "No source pairs pet-friendly with music nights in Bengaluru, so AI answers to 'pet friendly party Bangalore' have nothing to cite for that format",
+      "'How to find underground music events near me' content exists globally but not for Bengaluru specifically"
+    ],
+    "citationSurfaces": [
+      "District, Insider, HighApe listings",
+      "Time Out India",
+      "Deccan Herald",
+      "Explocity",
+      "Reddit r/bangalore"
+    ]
+  },
+  "opportunities": [
+    {
+      "opportunity": "Own 'pet-friendly music nights' in Bengaluru as a category of one",
+      "evidence": "Every pet event found is daytime/family/wellness; every music night found is pet-free",
+      "confidence": "high"
+    },
+    {
+      "opportunity": "Write fact-led event ads like the best competitors, but across distinct motivations (pets, sound, crowd, price, scarcity) instead of one promise",
+      "evidence": "Bloom In Green runs 3 variants of the same promise; Meta rewards distinct concepts",
+      "confidence": "high"
+    },
+    {
+      "opportunity": "List every CCD x Social night on District, Insider, HighApe and SortMyScene under both music and pet categories",
+      "evidence": "Both audiences discover events on these platforms",
+      "confidence": "medium"
+    },
+    {
+      "opportunity": "A Bengaluru 'find underground music events' guide and live gig index from the CCD scraper as a citable page",
+      "evidence": "Discovery guides exist for other cities; CCD already scrapes District, Insider, HighApe and Skillbox",
+      "confidence": "medium"
+    }
+  ],
+  "unverified": [
+    "CCD's own traffic, follower counts and past event sales (Ahrefs plan insufficient; site not fetched)",
+    "Ad performance of the competitors seen (Ad Library shows creative, not results)",
+    "Whether Social BLR allows pets on all nights and any venue limits",
+    "Reddit sentiment on Bengaluru's scene (only titles seen)"
+  ]
+}
