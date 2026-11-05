@@ -114,11 +114,11 @@
       "cadence": "3 posts a week, 1 document post, 1 newsletter a month"
     },
     {
-      "channel": "LinkedIn Thought Leader Ads on best posts",
+      "channel": "LinkedIn Thought Leader Ads in short bursts behind posts that already performed organically",
       "role": "demand",
-      "budgetShare": 0.6,
-      "kpi": "Landing-page click cost and AI Answer Check requests",
-      "cadence": "Always on, refresh weekly"
+      "budgetShare": 1,
+      "kpi": "Landing-page click cost and AI Answer Check requests (not total CTR)",
+      "cadence": "1-2 bursts a month, 3-4 days each, only on posts in the top 20% for saves/comments"
     },
     {
       "channel": "Signal-based outbound (Clay + Apollo)",
@@ -135,11 +135,11 @@
       "cadence": "Monthly pages, weekly citation check"
     },
     {
-      "channel": "Google Search on commercial GEO queries",
+      "channel": "Google Search on commercial GEO queries (paused until budget grows)",
       "role": "capture",
-      "budgetShare": 0.4,
-      "kpi": "Cost per AI Answer Check request",
-      "cadence": "Always on, small budget"
+      "budgetShare": 0,
+      "kpi": "n/a at ₹5k/month",
+      "cadence": "Revisit at ₹25k+/month"
     },
     {
       "channel": "AI Answer Check landing page + Lead Desk",
@@ -184,6 +184,7 @@
     "No public, nameable case studies (NDA): proof has to come from dated citation screenshots and generic descriptions",
     "Category is crowded with self-published rankings; Iterate needs to appear on those citation surfaces",
     "Iterate's own AI and search visibility is unmeasured (Ahrefs plan insufficient)",
-    "Founder time is the bottleneck for LinkedIn and sales calls"
+    "Founder time is the bottleneck for LinkedIn and sales calls",
+    "₹5,000/month buys only a few days of LinkedIn spend; paid is an amplifier for proven founder posts, not a lead engine. Outbound and founder content do the heavy lifting."
   ]
 }

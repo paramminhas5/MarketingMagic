@@ -3,157 +3,188 @@
 _2026-11-05 · Scout_
 
 ## Summary
-Bengaluru's underground electronic scene is busy and paid-social heavy: promoters like Bloom In Green, Oddvision, Sort My Scene and Echonyx run specific, fact-led Meta ads (artist origin, label credits, set times, venue, price), usually several variants of one promise. Pet events are also plentiful but are daytime, family or wellness formats. Nobody found pairs pets with underground music, which is CCD x Social's whole idea. Discovery runs through ticketing apps (District, Insider, HighApe, SortMyScene, Skillboxes), which creates a gap CCD's artist directory and gig scraper can fill.
+CCD sits where three markets meet: India's underground dance music scene (nights, artists, promoters), scene media and discovery (Wild City, Resident Advisor's India guides, Homegrown, ticketing apps), and culture-led streetwear drops. Ticketing apps (District, Insider, HighApe, SortMyScene, Skillbox) own transactions and run heavy Meta ads for promoters' nights; scene media owns editorial; nobody combines curated nights, a national scene platform, artist booking and limited drops under one brand with a music-first identity. CCD's live platform already does more than most competitors, but it has gaps that leak demand: points with no redemption, curated events that link offsite, no check-in or pre-event reminders.
 
-**Category:** Underground music nights and culture platform, Bengaluru
+**Category:** Underground dance music culture brand and scene platform, India
 
 ## Competitors
-### Bloom In Green Festival
-**Angle:** Curated minimal/psy nights with touring artists, sold on credibility and specifics
+### District / Insider / HighApe / SortMyScene
+**Angle:** Ticketing apps listing every night in town; run Meta ads on behalf of promoters
 
 Strengths:
-- Fact-led copy: artist origin, labels, set times
-- Festival credibility references (Fusion, Universo Paralello, Boom)
-- Clear early-bird pricing (₹1,119 + GST)
-
-Weaknesses:
-- Variants repeat one promise (low motivation diversity)
-
-Channels: Meta ads, Instagram
-
-### Oddvision
-**Angle:** Brings international acts for India debuts
-
-Strengths:
-- 'India debut' scarcity
-
-Weaknesses:
-- Artist-dependent; each event starts from zero
-
-Channels: Meta ads
-
-### Sort My Scene (https://sortmyscene.com)
-**Angle:** Ticketing platform running ads for promoters' nights (techno, hard techno, melodic house)
-
-Strengths:
-- Distribution for many promoters
+- Own the transaction and the habit of checking what's on
+- Large ad spend and inventory
 - Genre-tagged listings
 
 Weaknesses:
-- Platform voice, not a community
+- No curation or point of view
+- Platform voice, no community or culture
 
-Channels: Meta ads, ticketing app
+Channels: Meta ads, app, SEO listings
 
-### Echonyx Events
-**Angle:** Pan-India DJ nights
-
-Strengths:
-- Multi-city footprint
-
-Weaknesses:
-- Generic positioning
-
-Channels: Meta ads
-
-### skip-a-beat, Paradox, Kitty Su, Underground Madness and similar promoters
-**Angle:** Recurring club nights at Bengaluru venues
+### Skillbox
+**Angle:** Ticketing and discovery for independent and alternative music, with Warner Music India as a minority investor
 
 Strengths:
-- Established crowds and venue relationships
+- Credibility with indie and alternative crowds
+- Label backing
 
 Weaknesses:
-- Discovery depends on ticketing apps and Instagram
+- Ticketing-first, not a scene identity
 
-Channels: District, Insider, Instagram
+Channels: app, listings, partners
 
-### Pet events (Pawsome Party, Paws on Table, Pawfest, Wooofstock, Pupper Pool Day Out, Petcom)
-**Angle:** Daytime pet socials, pet yoga, pool days, cause events
+### Wild City (https://www.thewildcity.com)
+**Angle:** India's online music guide with artist and business directories
 
 Strengths:
-- Proven demand for pet-friendly outings in Bengaluru
-- Listed on District, Insider, HighApe
+- Long-standing editorial authority
+- Artist directory
 
 Weaknesses:
-- No music-led or night-culture format found
+- Media, not events or community
+- Directory not built for booking
 
-Channels: District, Insider, HighApe, Instagram
+Channels: editorial, SEO, social
+
+### Resident Advisor (India city guides) (https://ra.co)
+**Angle:** Global electronic music platform with India city guides
+
+Strengths:
+- Global trust with artists and serious fans
+- Artist and label pages
+
+Weaknesses:
+- Thin India coverage
+- Not local, no community on the ground
+
+Channels: platform, SEO, editorial
+
+### Homegrown
+**Angle:** Indian youth culture media that covers electronic events
+
+Strengths:
+- Reach with young culture audiences
+
+Weaknesses:
+- Broad culture, not music-first
+
+Channels: editorial, Instagram
+
+### Promoters and collectives (Bloom In Green, Oddvision, skip-a-beat, Paradox, Kitty Su nights)
+**Angle:** Individual nights sold on lineups and touring artists
+
+Strengths:
+- Specific, fact-led ads
+- Touring artist credibility
+
+Weaknesses:
+- Each night starts from zero; low motivation diversity in ads
+
+Channels: Meta ads, Instagram, ticketing apps
 
 ## Audience
-### Underground electronic gig-goers in Bengaluru (21+)
+### Underground dance music fans in Bengaluru, Mumbai, Delhi and Goa (21-35)
 Pains:
-- Finding the good nights among many listings
-- Touring sets are expensive and one-off
+- Finding the good nights among commercial listings
+- Rooms full of people who aren't there for the music
 
 Desires:
-- Live and touring sets with credible artists
-- A crowd that is there for the music
+- Curated nights with a crowd that listens
+- Knowing what's on this weekend in their genre
+- Being part of a scene
 
 Objections:
-- Price
-- Commercial or 'luxury club' vibes
+- Already use District/Insider
+- Another app to check
 
-Where they are: Instagram, District, Insider, SortMyScene, Skillboxes
+Where they are: Instagram, ticketing apps, WhatsApp groups, SoundCloud/Mixcloud
 
-### Pet owners in Bengaluru who go out
+### Culture and streetwear buyers (overlapping with fans)
 Pains:
-- Pet events are mostly daytime and family-style
+- Merch that looks like merch
 
 Desires:
-- Social outings where their pet is welcome
+- Limited, screen-printed pieces with a real scene behind them
+- Pet streetwear for their cat or dog
 
 Objections:
-- Is a music night safe and comfortable for pets?
+- Price for an unfamiliar label
+- Sizing
 
-Where they are: Instagram pet communities, District and Insider pet listings
+Where they are: Instagram, streetwear drop culture
 
-### Producers and DJs (local and touring)
+### DJs and producers (Indian and touring)
 Pains:
-- Getting gigs
-- Being discovered
+- Getting booked
+- Building an audience beyond friends
 
 Desires:
-- Profiles that get them booked
-- Learning production
+- A room of 200-400 people who listen
+- Set recordings and content
+- A profile that gets them booked
 
 Objections:
-- Another platform to maintain
+- Another profile to maintain
 
-Where they are: Instagram, SoundCloud/Mixcloud, WhatsApp groups
+Where they are: Instagram, SoundCloud/Mixcloud, WhatsApp, Wild City/RA
+
+### Promoters, venues and sponsors
+Pains:
+- Empty or wrong crowds
+- Low F&B spend
+- Content that doesn't last
+
+Desires:
+- The right crowd
+- Better spend and dwell time
+- Reach to a culture audience (sponsors)
+
+Objections:
+- Revenue split and minimums
+
+Where they are: Direct relationships, LinkedIn, Instagram
 
 ## Language bank
-- "Been waiting for minimal techno played live in Bengaluru?" (Bloom In Green Festival Meta ad, Nov 2026)
-- "Minimal techno, played live, for two hours." (Bloom In Green Festival Meta ad, Nov 2026)
-- "India Debut Tickets" (Oddvision Meta ad, Nov 2026)
-- "a day out with pets for a cause" (Pawfest 2025 listing, Explocity)
-- "Pan-India DJ Nights" (Echonyx Events Meta ad, Nov 2026)
+- "The Resident Advisor of India, built by the people who live it." (CCD codebase README)
+- "a curated room of 200-400 people who listen" (catscandance.com For Artists FAQ)
+- "The crowd is here for the music" (catscandance.com For Venues FAQ)
+- "Most episodes are free entry with name on the door." (catscandance.com homepage FAQ)
+- "No restocks." (catscandance.com shop FAQ)
+- "We don't book commercial EDM or top-40 sets." (catscandance.com For Artists FAQ)
+- "Been waiting for minimal techno played live in Bengaluru?" (Bloom In Green Festival Meta ad (competitor), Nov 2026)
 
 ## Search and AI answers
 Commercial queries:
-- pet friendly events Bangalore
-- techno events Bangalore this weekend
+- events in Bangalore this weekend
+- house music events Bangalore
+- drum and bass events Bangalore
 - underground parties Bangalore
-- dog friendly bars Bangalore
-- learn Ableton online India
+- pet streetwear India
+- cat bandana India
 
 AI-answer gaps:
-- No source pairs pet-friendly with music nights in Bengaluru, so AI answers to 'pet friendly party Bangalore' have nothing to cite for that format
-- 'How to find underground music events near me' content exists globally but not for Bengaluru specifically
+- Questions like 'where to find underground electronic events in India' are answered from ticketing apps and Wild City; a maintained scene guide per city is citable
+- Curated events on CCD link offsite, so CCD pages don't exist to be cited for individual nights
+- 'Pet friendly events Bangalore' answers have no music-led option
 
 Citation surfaces:
-- District, Insider, HighApe listings
+- Wild City
+- ra.co city guides
+- Homegrown
 - Time Out India
-- Deccan Herald
-- Explocity
 - Reddit r/bangalore
+- ticketing app listings
 
 ## Opportunities
-- **Own 'pet-friendly music nights' in Bengaluru as a category of one** (high): Every pet event found is daytime/family/wellness; every music night found is pet-free
-- **Write fact-led event ads like the best competitors, but across distinct motivations (pets, sound, crowd, price, scarcity) instead of one promise** (high): Bloom In Green runs 3 variants of the same promise; Meta rewards distinct concepts
-- **List every CCD x Social night on District, Insider, HighApe and SortMyScene under both music and pet categories** (medium): Both audiences discover events on these platforms
-- **A Bengaluru 'find underground music events' guide and live gig index from the CCD scraper as a citable page** (medium): Discovery guides exist for other cities; CCD already scrapes District, Insider, HighApe and Skillbox
+- **Make the owned list the engine: every Episode RSVP, drop and Discover visit feeds email + WhatsApp, and the weekly digest becomes the reason to stay** (high): Episodes are free RSVP (so the RSVP is the conversion), and the platform already has early access, WhatsApp opt-in and a weekly digest
+- **Fix the leaks before buying traffic: points redemption, pre-event WhatsApp reminders, check-in, and on-site pages for curated events** (high): The README lists these as gaps and calls the missing redemption a broken promise
+- **Sell limited drops off the back of Episodes and the founder's 150k page, with scarcity that's real (no restocks)** (medium): Drops are limited and screen-printed; scarcity is a true proof point
+- **Win the artist side first: artists claiming profiles and sharing their Episode content bring their fans** (medium): For Artists offer (recordings, content, 200-400 listening room) is stronger than anything competitors pitch to artists
+- **Per-city scene guides and per-event pages as the citable source for underground events in India** (medium): Scene pages and Bengaluru guide exist; curated events have no on-site page yet
 
 ## Not verified
-- CCD's own traffic, follower counts and past event sales (Ahrefs plan insufficient; site not fetched)
-- Ad performance of the competitors seen (Ad Library shows creative, not results)
-- Whether Social BLR allows pets on all nights and any venue limits
-- Reddit sentiment on Bengaluru's scene (only titles seen)
+- Current list size, RSVP volumes, Episode frequency and shop revenue
+- Traffic and search rankings for catscandance.com (Ahrefs plan insufficient, Semrush has no API units)
+- How many artists have claimed profiles
+- Season finale date and sponsor status for CCD x Social

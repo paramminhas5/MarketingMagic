@@ -1,6 +1,6 @@
 # Strategy: Iterate
 
-_2026-11-05 · Strategist_
+_2026-11-05 · Strategist · 10 qualified discovery calls a month_
 
 ## Positioning
 > For culture-led consumer brands in India, Iterate is the AI visibility and growth pod that gets you cited in AI answers and then does the work across search, social, paid and community, run by operators rather than account managers.
@@ -44,10 +44,10 @@ _2026-11-05 · Strategist_
 | channel | role | budget | KPI | cadence |
 |---|---|---|---|---|
 | Founder LinkedIn (Param, organic) | demand | 0% | Saves, profile visits, inbound DMs | 3 posts a week, 1 document post, 1 newsletter a month |
-| LinkedIn Thought Leader Ads on best posts | demand | 60% | Landing-page click cost and AI Answer Check requests | Always on, refresh weekly |
+| LinkedIn Thought Leader Ads in short bursts behind posts that already performed organically | demand | 100% | Landing-page click cost and AI Answer Check requests (not total CTR) | 1-2 bursts a month, 3-4 days each, only on posts in the top 20% for saves/comments |
 | Signal-based outbound (Clay + Apollo) | capture | 0% | Positive reply rate (target 1-2%+) and calls booked | Weekdays, 15-25 sends per mailbox per day after warm-up |
 | GEO on own site + citation surfaces (directories, trade press, LinkedIn articles) | demand | 0% | Brand cited for 'GEO agency India' prompts | Monthly pages, weekly citation check |
-| Google Search on commercial GEO queries | capture | 40% | Cost per AI Answer Check request | Always on, small budget |
+| Google Search on commercial GEO queries (paused until budget grows) | capture | 0% | n/a at ₹5k/month | Revisit at ₹25k+/month |
 | AI Answer Check landing page + Lead Desk | convert | 0% | Request-to-call rate | Reply within 10 minutes |
 | Email nurture (results, then pilot offer) | retain | 0% | Call bookings from nurture | Event-driven |
 
@@ -64,3 +64,4 @@ Qualified discovery calls booked per month: 10
 - Category is crowded with self-published rankings; Iterate needs to appear on those citation surfaces
 - Iterate's own AI and search visibility is unmeasured (Ahrefs plan insufficient)
 - Founder time is the bottleneck for LinkedIn and sales calls
+- ₹5,000/month buys only a few days of LinkedIn spend; paid is an amplifier for proven founder posts, not a lead engine. Outbound and founder content do the heavy lifting.

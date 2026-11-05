@@ -1,0 +1,113 @@
+client: iterate
+timezone: Asia/Kolkata
+products:
+  - id: scout
+    enabled: true
+    schedule: 7 9 1 * *
+    autonomy: A0
+    caps: {}
+    notes: Monthly refresh of the GEO agency landscape and AI answers for category prompts
+  - id: strategist
+    enabled: true
+    schedule: on-demand
+    autonomy: A2
+    caps: {}
+    notes: ""
+  - id: architect
+    enabled: true
+    schedule: on-demand
+    autonomy: A2
+    caps: {}
+    notes: ""
+  - id: studio
+    enabled: false
+    schedule: on-demand
+    autonomy: A1
+    caps: {}
+    notes: "Off: paid is LinkedIn TLAs on Param's own posts, no ad creative needed"
+  - id: voice
+    enabled: true
+    schedule: 23 8 * * 1
+    autonomy: A2
+    caps:
+      draftsPerWeek: 4
+    notes: 3 LinkedIn posts + 1 document post a week, newsletter monthly
+  - id: social
+    enabled: false
+    schedule: on-demand
+    autonomy: A1
+    caps: {}
+    notes: "Off: founder-led, not brand-page-led"
+  - id: search
+    enabled: true
+    schedule: 11 7 1 * *
+    autonomy: A2
+    caps:
+      pagesPerMonth: 2
+    notes: Citation-first case studies, AI Answer Check page, directory/trade-press seeding briefs
+  - id: pages
+    enabled: true
+    schedule: on-demand
+    autonomy: A2
+    caps: {}
+    notes: AI Answer Check landing page
+  - id: media-buyer
+    enabled: true
+    schedule: 43 9 * * 1
+    autonomy: A2
+    caps:
+      dailySpend: 1500
+      monthlySpend: 5000
+    notes: "Weekly check: pick the best organic post for a 3-4 day TLA burst; LinkedIn not connected, so Param launches"
+  - id: hunter
+    enabled: true
+    schedule: 19 8 * * 1-5
+    autonomy: A2
+    caps:
+      sendsPerMailboxPerDay: 20
+      newContactsPerWeek: 100
+    notes: "Signals: new marketing leader, funding, marketing hires at Indian consumer brands; sending starts after domain warm-up"
+  - id: lifecycle
+    enabled: true
+    schedule: on-demand
+    autonomy: A1
+    caps: {}
+    notes: AI Answer Check results nurture to a call, no-show recovery
+  - id: lead-desk
+    enabled: true
+    schedule: event
+    autonomy: A1
+    caps: {}
+    notes: Reply within 10 minutes; hot leads alert Param
+  - id: gatekeeper
+    enabled: true
+    schedule: after every production run
+    autonomy: A0
+    caps: {}
+    notes: ""
+  - id: analyst
+    enabled: true
+    schedule: 3 8 * * 1
+    autonomy: A0
+    caps: {}
+    notes: Weekly memo
+budgets:
+  currency: INR
+  monthlyPaid: 5000
+  dailyCap: 1500
+approvers:
+  - param
+kpis:
+  - name: Qualified discovery calls per month
+    target: "10"
+  - name: AI Answer Check requests per month
+    target: "20"
+  - name: Outbound positive reply rate
+    target: 1-2%+
+  - name: Iterate cited for tracked 'GEO agency India' prompts
+    target: Track monthly
+weeklyRhythm:
+  - "Mon: Analyst memo, Voice drafts to Param, Media Buyer picks a post to amplify"
+  - "Weekdays: Hunter refreshes signals and drafts sequences for approval"
+  - "Within 10 minutes of any request: Lead Desk"
+  - "Monthly: Scout refresh, Search pages and seeding briefs, Strategist review"

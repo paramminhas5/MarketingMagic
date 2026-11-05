@@ -1,0 +1,14 @@
+# Fill in the real details, then: mm campaign clients/cats-can-dance/briefs/next-episode.yaml
+campaign: next-episode
+objective: Fill the next Episode via RSVPs and grow the owned list
+offer: "TODO: Episode date, venue, lineup, RSVP link"
+calendar: "TODO: lineup announcement date, any apparel drop"
+studio:
+  count: 15
+voice:
+  voice: param
+  channel: instagram
+  count: 3
+pages:
+  offer: "TODO: Episode RSVP"
+  source: meta

@@ -1,67 +1,72 @@
 # Strategy: Cats Can Dance
 
-_2026-11-05 · Strategist_
+_2026-11-05 · Strategist · Grow the owned audience (RSVPs, email, WhatsApp) and sell out drops, with ₹10,000/month paid_
 
 ## Positioning
-> Cats Can Dance runs Bengaluru's pet-friendly underground music nights: proper sets, a crowd that's there for the music, and your dog's welcome too.
+> Cats Can Dance is India's underground dance music crew and scene platform: curated RSVP-only nights where the crowd listens, every underground event in one place, and limited drops from the people who live it.
 
 **Alternatives:**
-- A regular techno or house night at a Bengaluru club (pets stay home)
-- A daytime pet social or pet yoga event (no real music)
-- Staying in with the dog
+- Scroll District, Insider or HighApe and pick a night
+- Follow a few promoters on Instagram
+- Read Wild City or RA's India guides
+- Buy generic merch or none
 
 **Unique:**
-- Pet-friendly underground music nights: CCD x Social at Social BLR
-- Music-first curation from a producer/DJ founder (Merman)
-- A platform behind the nights: artist directory, gig scraper across Indian ticketing sites, fan XP, CCD School
-- Distinct identity: brutalist isometric cat world, top-hat cat mascot
-- Founder's ~150k-follower social page as distribution
+- Curated, capped, RSVP-only Episodes (200-400 people) in house, disco, UK garage, breaks, drum & bass, jungle and dub techno; no commercial EDM
+- A national scene platform behind the nights: Discover (all underground events in one feed), artist profiles with booking, promoter listings, city and genre guides
+- Limited screen-printed apparel and pet streetwear with no restocks
+- Pet-friendly CCD x Social series and Cats Can Care
+- A distinct visual world (brutalist isometric cats, top-hat cat) and a founder who DJs and produces, with a ~150k-follower page
 
 **Value:**
-- A real night out without leaving your pet behind
-- Good underground music in a crowd that's there for it
-- For artists: a way to get found and booked
+- Fans: the good nights, with a crowd that listens, and the whole scene in one place
+- Artists: a listening room, real content and a profile that gets them booked
+- Venues and promoters: the right crowd and better spend
+- Buyers: pieces from a real scene, not merch
 
-**Best fit:** Bengaluru gig-goers aged 21-35 who love electronic and underground music and own (or love) pets, and want nights out that don't mean choosing between the two.
+**Best fit:** 21-35 year-olds in Bengaluru (then Mumbai, Delhi, Goa) who choose nights by sound and crowd, buy limited streetwear, and often have a pet; plus the DJs who play for them.
 
-**Category:** Pet-friendly underground music nights
+**Category:** Underground dance music culture brand and scene platform
 
 ## Motivation matrix
 | id | motivation | insight | proof | segments |
 |---|---|---|---|---|
-| bring-your-pet | Don't leave them home | Pet owners skip nights out or feel guilty leaving pets alone; every music night in town is pet-free | CCD x Social nights are pet-friendly by design | Pet owners who go out |
-| the-sound | The music is the point | Underground fans pick nights on lineup and sound, not venue luxury | Lineups of local and touring artists; Founder is a producer/DJ | Underground gig-goers |
-| the-crowd | Your kind of crowd | People want a room of people who care about music (and dogs), not a commercial club crowd | Recurring series with returning regulars; Fan XP system rewards regulars | Underground gig-goers, Pet owners |
-| scarcity-drop | Limited night, limited tickets | Early-bird and limited capacity drive action, as competitors show with early-bird pricing and India debuts | Early-bird tier per night; Venue capacity limits | Underground gig-goers |
-| cat-world-identity | Join the cat world | A strong visual world and mascot gives people something to belong to and share | Brutalist isometric cat world; Top-hat cat mascot | Design and culture crowd |
-| artist-path | Get booked, get better | Local and touring producers want gigs and discovery; CCD gives them profiles and learning | Artist directory with claimable profiles; CCD School missions and simulators | Producers and DJs |
+| room-that-listens | A room that listens | Fans pick nights by crowd as much as lineup; most rooms aren't there for the music | Capped Episodes of 200-400; No commercial EDM or top-40 | Fans, Artists |
+| the-sound | The sound | Genre loyalists (house, garage, DnB, jungle, disco) want their genre done properly | Genre list on every Episode; Resident and guest selectors | Fans |
+| free-but-capped | Free, but you have to RSVP | Free entry with a cap creates real urgency without discounting | Most Episodes are free with name on the door; RSVP-only, capped | Fans |
+| whats-on | Know what's on, everywhere | Finding good underground nights across apps is a chore; one feed and a Monday email solves it | Discover pulls Skillbox, District, Insider, HighApe nightly; Weekly digest; This Weekend tab | Fans |
+| limited-drop | No restocks | Streetwear buyers act on real scarcity and a scene story | Screen-printed in Bangalore; No restocks on apparel or pet drops | Culture and streetwear buyers |
+| bring-your-pet | Bring your pet | Pet owners skip nights out; CCD x Social and pet streetwear are made for them | CCD x Social is pet-friendly; Cat bandanas and pet bucket hats; Cats Can Care NGO directory | Pet owners, Fans |
+| get-booked | Play a room that listens, get booked | DJs want an audience and content, not just a slot | Full set recording and photo/video assets; Profile with EPK, availability and booking | Artists |
 
 ## Offers
-- **Early-bird with your pet**: Limited early-bird tier, then regular; pet entry free with a ticket (confirm venue rules). Hypothesis: A small early-bird tier with a 'bring your pet' line sells the first third of tickets faster than a single price. Risk: Venue pet limits; need clear pet rules on the page
-- **Crew pass**: 4 tickets at a small discount. Hypothesis: Groups of 3-4 book together and bring friends who wouldn't come alone. Risk: Margin on a small-capacity night
-- **Claim your artist profile**: Free profile claim with a shareable card. Hypothesis: Artists claiming profiles share them and bring their fans to the platform and nights. Risk: Low claim rate without outreach
+- **RSVP + join the list**: RSVP form collects email and WhatsApp opt-in; 24h-before WhatsApp reminder; day-after recap with set recording. Hypothesis: Asking for email and WhatsApp at RSVP (with a reminder promise) grows the owned list faster than a standalone newsletter signup. Risk: Form friction lowers RSVPs; keep it to name, email, WhatsApp, how you heard about us
+- **Episode drop**: List gets 24h early access; limited quantity; available at the Episode and online. Hypothesis: A small apparel or pet drop announced at each Episode and sold to the list first converts better than standalone drops. Risk: Inventory risk if quantities are set too high
+- **Claim your profile**: Outreach to every artist who has played or been scraped; shareable profile card. Hypothesis: Artists who claim profiles share them and bring their fans to Discover and Episodes. Risk: Low claim rate without personal outreach
+- **Points that pay out**: Redeem points for a shop discount code; show balance in the digest. Hypothesis: Turning on points redemption (e.g. a shop discount at 100 points) raises repeat RSVPs and first purchases. Risk: Engineering time; the current 'coming soon' state hurts trust until it ships
 
 ## Channels
 | channel | role | budget | KPI | cadence |
 |---|---|---|---|---|
-| Meta ads (Instagram first), broad targeting, 15+ distinct concepts | demand | 80% | Cost per ticket | From announcement to event day, refresh weekly |
-| Boosts of best organic posts from the 150k page and CCD account | demand | 20% | Cost per profile visit and ticket | Twice a week |
-| Founder page (~150k) daily music content | demand | 0% | Shares, saves, follows to CCD | Daily |
-| Ticketing listings (District, Insider, HighApe, SortMyScene) in music and pet categories | capture | 0% | Tickets by platform | Every night |
-| Event pages with 'how did you hear about us' + WhatsApp | convert | 0% | Page-to-ticket rate | Per event |
-| WhatsApp community and post-event loop | retain | 0% | Repeat attendance | Event drops plus day-after recap |
-| Citable pages: Bengaluru underground gig guide + pet-friendly nights page | demand | 0% | AI-answer citations and organic visits | Monthly update |
+| Founder page (~150k) and CCD Instagram: daily music content, Episode and drop moments | demand | 0% | Shares, saves, follows to CCD, RSVPs from Instagram (HDYHAU) | Daily |
+| Meta ads (Instagram first), broad, distinct concepts across motivations, optimised for RSVP/sign-up | capture | 70% | Cost per RSVP and cost per list sign-up | From Episode announcement to the night; ~₹7,000/month |
+| Boosts of the best organic posts (Reels and carousels) | demand | 20% | Cost per profile visit and RSVP | Weekly, only posts beating the account median on shares/saves |
+| Drop retargeting to site visitors and engagers | convert | 10% | Cost per purchase | Drop weeks only |
+| Email weekly digest + WhatsApp community and reminders | retain | 0% | RSVP rate from list, repeat attendance, drop revenue per recipient | Monday digest, 24h reminders, day-after recap |
+| Ticketing app listings (District, Insider, HighApe, SortMyScene, Skillbox) | capture | 0% | RSVPs by platform | Every Episode |
+| Scene guides, genre pages and on-site event pages (SEO/GEO) | demand | 0% | AI-answer citations and organic visits to Discover | Monthly guide updates; a page per event |
+| Artist outreach to claim profiles; artists share their Episode content | demand | 0% | Profiles claimed, artist shares, RSVPs via artists (HDYHAU) | Weekly |
 
 ## Primary metric
-Tickets sold per night and cost per ticket: Sell out each night; set the cost-per-ticket target after the first 50 paid sales
+Owned audience growth: new RSVPs + email + WhatsApp contacts per month, and cost per new contact: Set after the first month of tracking; then sell out every Episode and every drop
 
 ## Tests
-- 'Don't leave them home' beats 'the music is the point' on cost per ticket · metric: Cost per ticket · min sample: 30 tickets per motivation · kill: Pause a motivation at 2x the best cost after meaningful spend
-- Founder talking-head video beats designed statics · metric: Cost per ticket · min sample: 30 tickets per format · kill: Drop the losing format for the next night
-- Listing in pet categories on ticketing apps adds sales from non-music audiences · metric: Tickets from pet listings and HDYHAU answers · min sample: Two nights · kill: Stop pet-category listings if under 5% of tickets over two nights
+- 'A room that listens' beats 'Free, but you have to RSVP' on cost per RSVP · metric: Cost per RSVP · min sample: 30 RSVPs per motivation · kill: Pause a motivation at 2x the best cost after ₹1,500 spend
+- Founder talking-head Reels beat designed statics · metric: Cost per RSVP · min sample: 30 RSVPs per format · kill: Drop the losing format for the next Episode
+- List-first early access sells a drop faster than an open launch · metric: Units sold in 48h · min sample: Two drops · kill: Revert to open launches if early access doesn't beat it twice
 
 ## Risks
-- Venue rules on pets and noise; pet welfare must be visibly handled
-- Founder notes CCD is barely doing events right now; the series needs a fixed calendar to build momentum
-- Small budgets limit how fast Meta learns
-- Follower base of the CCD account is small; the 150k founder page must hand off to CCD
+- ₹10,000/month is small: Meta needs concentrated spend around each Episode to learn, so avoid splitting across many campaigns
+- If Episodes are infrequent, paid has nothing to point at; a fixed calendar matters more than budget
+- Platform leaks (no points redemption, offsite curated events, no reminders) waste paid traffic until fixed
+- Free RSVPs can no-show; track attendance, not just RSVPs
