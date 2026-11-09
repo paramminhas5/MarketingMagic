@@ -86,7 +86,8 @@ readiness gate; analysis skips weeks with no data. Adding a client needs no new 
 mm run studio --client cats-can-dance --input '{"count":15,"campaign":"dec-night"}'
 mm campaign clients/cats-can-dance/briefs/next-event.yaml   # every enabled production product + Gatekeeper
 mm cycle --target 250                                         # Lead Desk -> Gatekeeper -> Analyst
-mm readiness                                                  # is spend/outbound unlocked, and why not
+mm readiness                                                  # is spend/outbound unlocked, the loops score, and why not
+mm connect                                                    # what is plugged in, what is missing, the step that fixes each
 mm approvals                                                  # what needs you
 mm approve <id> --final edited.txt                            # your edit trains future drafts
 ```

@@ -1,12 +1,13 @@
 {
   "client": "iterate",
-  "at": "2026-11-09T08:03:42.763Z",
+  "at": "2026-11-09T12:40:43.124Z",
   "score": 28,
+  "loopsScore": 20,
   "spendUnlocked": false,
   "outboundUnlocked": false,
   "blockers": [
     "LinkedIn Insight Tag with a conversion: Add the LinkedIn Insight Tag site-wide and a conversion for the form submit in Campaign Manager.",
-    "Every lead reaches the engine: Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`).",
+    "Every lead reaches the engine: Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own lead table into the engine (`mm import feed` / `mm import lead`).",
     "Strategy approved by a human: Review research/strategy.md and approve it.",
     "Machine and caps approved: Review machine.yaml and approve it.",
     "Separate sending domains for cold email: Buy 2-3 lookalike domains, add them to audit.sendingDomains, and warm them for 2+ weeks."
@@ -115,7 +116,7 @@
       "status": "fail",
       "evidence": "Lead Desk on; lead endpoint not configured; 0 leads in store.",
       "why": "Speed-to-lead: 19% conversion with an instant reply vs 4% after 3 hours in one India case (vendor-reported, 05-conversion). You can't reply fast to leads you can't see.",
-      "fix": "Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`).",
+      "fix": "Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own lead table into the engine (`mm import feed` / `mm import lead`).",
       "owner": "developer",
       "fixWith": "supabase/functions/lead-intake",
       "gates": [
@@ -207,7 +208,7 @@
       "title": "Homepage responds fast and light",
       "severity": "minor",
       "status": "pass",
-      "evidence": "490 ms, 60 KB HTML.",
+      "evidence": "821 ms, 60 KB HTML.",
       "why": "Slow pages lose mobile visitors before the ad's promise lands.",
       "fix": "Check Core Web Vitals; trim the initial HTML/JS on landing routes.",
       "owner": "developer",
@@ -357,6 +358,66 @@
       "why": "Copy that reads as AI underperforms; human-edited, voice-matched copy wins (04, 10).",
       "fix": "Paste 10-20 real posts or messages by Param Minhas into voice/param.md.",
       "owner": "human",
+      "gates": []
+    },
+    {
+      "id": "loops.referral",
+      "category": "loops",
+      "title": "Referral with a reward for both sides",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "No referral or invite code found.",
+      "why": "A friend's invite converts far better than an ad, and a two-sided reward is what gets the invite sent (01-demand-creation, 06-lifecycle-retention).",
+      "fix": "Ask happy clients for one named intro at the moment of delivery, with a thank-you that's worth their time.",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "loops.share_after_conversion",
+      "category": "loops",
+      "title": "Share prompt right after someone buys or signs up",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "No share flow found.",
+      "why": "Intent to tell people peaks in the minute after a purchase; a share card with their name on it there is the cheapest reach a brand gets (01, 07).",
+      "fix": "On the confirmation screen and in the confirmation email, offer a one-tap share (image card plus link that carries their invite code).",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "loops.loyalty",
+      "category": "loops",
+      "title": "Loyalty that rewards coming back",
+      "severity": "minor",
+      "status": "pass",
+      "evidence": "Seen in: app/industries/[slug]/page.tsx",
+      "why": "Repeat customers cost nothing to acquire; a visible balance and a next reward turn one visit into a habit (06-lifecycle-retention).",
+      "fix": "A retainer or volume tier that makes the second project cheaper to say yes to.",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "loops.day_one",
+      "category": "loops",
+      "title": "Something of value on day one",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "No welcome credit or first-purchase offer found.",
+      "why": "New members who get value in the first session come back; an empty account on day one is the most common leak in retention (06).",
+      "fix": "Give new members a small credit, a guaranteed spot or a first-order perk, tied to completing the first real action.",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "loops.measured",
+      "category": "loops",
+      "title": "Shares and invites are counted",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "Share links don't carry a ref, so the loop can't be measured.",
+      "why": "You can't tune a K-factor you can't see: shares sent, opens and joins per share (09-analytics-attribution).",
+      "fix": "Add ?ref=<id> to every share link and count shares, opens and joins against it.",
+      "owner": "developer",
       "gates": []
     }
   ]

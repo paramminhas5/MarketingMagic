@@ -1,5 +1,6 @@
 // mm: the Marketing Magic command line.
 import { existsSync, readFileSync } from "node:fs";
+import { connectReport } from "./connect.ts";
 import { resolve } from "node:path";
 import {
   activeClient,
@@ -80,7 +81,8 @@ Pipelines (the Conductor)
 Autopilot
   mm tick [--all | --client slug] [--dry]  run every product that's due per machine.yaml
   mm autopilot                             the one scheduled-task prompt that runs everything
-  mm readiness [--client slug]             is spend / outbound unlocked, and why not
+  mm readiness [--client slug]             is spend / outbound unlocked (and the loops score), and why not
+  mm connect [--client slug]               what the machine is plugged into, what's missing, the step that fixes each
 
 Products (each works alone)
   mm products                              list products and their jobs
@@ -157,6 +159,14 @@ async function main() {
       return;
     }
 
+    case "connect": {
+      const slug = activeClient(flags.client);
+      const { md, path } = await connectReport(slug);
+      console.log(md);
+      console.log(`\nSaved: ${path}`);
+      return;
+    }
+
     case "readiness": {
       const slug = activeClient(flags.client);
       for (const g of ["spend", "outbound"] as const) {
@@ -164,6 +174,10 @@ async function main() {
         console.log(`${g}: ${r.open ? "unlocked" : "LOCKED"}${r.score !== undefined ? ` (score ${r.score}/100)` : ""}`);
         for (const reason of r.reasons) console.log(`  - ${reason}`);
       }
+      try {
+        const r = JSON.parse(readFileSync(resolve(clientDir(slug), "research", "readiness.json"), "utf8"));
+        if (typeof r.loopsScore === "number") console.log(`loops: ${r.loopsScore}/100 (referral, share after buying, loyalty, day-one value, measured)`);
+      } catch {}
       console.log(`Details: clients/${slug}/research/readiness.md · plan: clients/${slug}/out/opening-playbook.md`);
       return;
     }
@@ -272,8 +286,20 @@ async function main() {
         console.log(`Imported ${parsed.length} leads`);
       } else if (args[0] === "feed") {
         // Rows shaped like a site's marketing.leads_feed: one per conversion, with how they heard.
-        const existing = new Set((await store.list<Lead>("leads")).map((l) => l.id));
+        const known = new Map((await store.list<Lead>("leads")).map((l) => [l.id, l]));
+        const existing = new Set(known.keys());
         const weekAgo = Date.now() - 7 * 864e5;
+        const iso = (v: unknown) => (v && !Number.isNaN(Date.parse(String(v))) ? new Date(String(v)).toISOString() : undefined);
+        // Speed-to-lead: when the confirmation went out (acked_at, emailed_at) and when a person answered (responded_at).
+        const timing = (r: any) => ({ ackAt: iso(r.acked_at ?? r.emailed_at), firstResponseAt: iso(r.responded_at ?? r.handled_at) });
+        let timed = 0;
+        for (const r of rows) {
+          const l = known.get(String(r.id));
+          if (!l) continue;
+          const t = timing(r);
+          const patch = { ...(t.ackAt && !l.ackAt ? { ackAt: t.ackAt } : {}), ...(t.firstResponseAt && !l.firstResponseAt ? { firstResponseAt: t.firstResponseAt } : {}) };
+          if (Object.keys(patch).length) { await store.update<Lead>("leads", l.id, patch); timed++; }
+        }
         const parsed = rows
           .filter((r) => r.id && r.email && !existing.has(String(r.id)))
           .map((r) => {
@@ -292,10 +318,11 @@ async function main() {
               hdyhauRaw: r.heard_from ?? undefined,
               status: converted ? "won" : src.startsWith("signup") || old ? "contacted" : "new",
               createdAt: new Date(r.created_at).toISOString(),
+              ...Object.fromEntries(Object.entries(timing(r)).filter(([, v]) => v)),
             });
           });
         await store.insertMany("leads", parsed);
-        console.log(`Imported ${parsed.length} new conversions (${rows.length - parsed.length} already in the store or unusable)`);
+        console.log(`Imported ${parsed.length} new conversions (${rows.length - parsed.length} already in the store or unusable)${timed ? `, response times added to ${timed}` : ""}`);
       } else throw new Error("mm import metrics|lead|feed <file.json>");
       return;
     }

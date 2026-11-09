@@ -19,6 +19,12 @@ The **Auditor** checks every client's funnel against known, evidence-backed leak
 
 Evidence comes from the live site, pages a Claude session saved, the client's codebase, DNS and the engine's own state. Checks are deterministic: the same funnel always gets the same verdict. A human can attest what the engine can't see (`audit.attest` in client.yaml). It writes `research/readiness.md`, `out/opening-playbook.md` (fixes ordered blockers-first and grouped by owner) and a fix kit in `out/fixes/` (pixel + CAPI notes, HDYHAU field, llms.txt, JSON-LD).
 
+**Two scores.** Readiness asks whether money leaks out of the funnel, and it is what locks paid spend and outbound. Loops asks whether each customer brings the next one: a referral with a reward for both sides, a share prompt right after buying, loyalty that rewards coming back, something of value on day one, and shares that are counted. Loops never locks anything. It decides how far each rupee of paid goes, and it weighs more for consumer and creator businesses than for B2B. Code only counts when it is on the repo's default branch: work on another branch, or uncommitted, scores a warn ("built, not shipped") until it is merged and deployed.
+
+**`mm connect`** lists what a client's machine is plugged into (model, store, leads feed, alerts, codebase, ad accounts, outbound, voice samples), what's missing, who owns each gap and the one step that fixes it. It also lists the checks only a human can confirm and the approvals waiting. Saved to `out/connect.md`.
+
+**Speed to lead from data.** `mm import feed` reads `acked_at` (or `emailed_at`) and `responded_at` (or `handled_at`) from a site's leads feed. Later imports fill those times in on leads already stored, so the Auditor's response-speed check measures real confirmations instead of asking.
+
 Media Buyer will not create campaigns and Hunter marks sequences "sending blocked" while the relevant gate is locked. A missing or 14-day-old audit is a locked gate.
 
 ## 2. Very likely with enough volume: find what works

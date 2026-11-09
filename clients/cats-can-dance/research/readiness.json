@@ -1,7 +1,8 @@
 {
   "client": "cats-can-dance",
-  "at": "2026-11-09T11:21:28.390Z",
+  "at": "2026-11-09T12:40:40.926Z",
   "score": 34,
+  "loopsScore": 69,
   "spendUnlocked": false,
   "outboundUnlocked": false,
   "blockers": [
@@ -17,7 +18,7 @@
     "live: https://catscandance.com/artists",
     "live: https://catscandance.com/promote",
     "live: https://catscandance.com/gate",
-    "codebase: /home/claude/catscandanceoct2026 (682 files)",
+    "codebase: /home/claude/catscandanceoct2026 (688 files, branch grow/points; 14 files not on the default branch count as not live)",
     "engine state"
   ],
   "checks": [
@@ -211,7 +212,7 @@
       "title": "Homepage responds fast and light",
       "severity": "minor",
       "status": "pass",
-      "evidence": "194 ms, 172 KB HTML.",
+      "evidence": "179 ms, 172 KB HTML.",
       "why": "Slow pages lose mobile visitors before the ad's promise lands.",
       "fix": "Check Core Web Vitals; trim the initial HTML/JS on landing routes.",
       "owner": "developer",
@@ -345,6 +346,66 @@
       "why": "Copy that reads as AI underperforms; human-edited, voice-matched copy wins (04, 10).",
       "fix": "Paste 10-20 real posts or messages by Param Minhas into voice/param.md.",
       "owner": "human",
+      "gates": []
+    },
+    {
+      "id": "loops.referral",
+      "category": "loops",
+      "title": "Referral with a reward for both sides",
+      "severity": "major",
+      "status": "warn",
+      "evidence": "Built on branch grow/points but not shipped yet: supabase/migrations/063_points.sql, src/lib/points.ts, src/components/points/PointsCard.tsx. Merge and deploy (and apply any migration) to pass.",
+      "why": "A friend's invite converts far better than an ad, and a two-sided reward is what gets the invite sent (01-demand-creation, 06-lifecycle-retention).",
+      "fix": "Give every customer a personal invite link; reward both sides once the friend actually buys or shows up, not on signup.",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "loops.share_after_conversion",
+      "category": "loops",
+      "title": "Share prompt right after someone buys or signs up",
+      "severity": "major",
+      "status": "pass",
+      "evidence": "Seen in: src/components/tickets/NightTools.tsx",
+      "why": "Intent to tell people peaks in the minute after a purchase; a share card with their name on it there is the cheapest reach a brand gets (01, 07).",
+      "fix": "On the confirmation screen and in the confirmation email, offer a one-tap share (image card plus link that carries their invite code).",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "loops.loyalty",
+      "category": "loops",
+      "title": "Loyalty that rewards coming back",
+      "severity": "major",
+      "status": "warn",
+      "evidence": "Built on branch grow/points but not shipped yet: supabase/migrations/063_points.sql, src/lib/points.ts. Merge and deploy (and apply any migration) to pass.",
+      "why": "Repeat customers cost nothing to acquire; a visible balance and a next reward turn one visit into a habit (06-lifecycle-retention).",
+      "fix": "Points from verified purchases or visits, a clear next reward, and status tiers. Derive points from records you already trust so they can't be gamed.",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "loops.day_one",
+      "category": "loops",
+      "title": "Something of value on day one",
+      "severity": "minor",
+      "status": "warn",
+      "evidence": "Built on branch grow/points but not shipped yet: supabase/migrations/063_points.sql, pages/points.tsx. Merge and deploy (and apply any migration) to pass.",
+      "why": "New members who get value in the first session come back; an empty account on day one is the most common leak in retention (06).",
+      "fix": "Give new members a small credit, a guaranteed spot or a first-order perk, tied to completing the first real action.",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "loops.measured",
+      "category": "loops",
+      "title": "Shares and invites are counted",
+      "severity": "minor",
+      "status": "pass",
+      "evidence": "Seen in: supabase/migrations/048_loops.sql",
+      "why": "You can't tune a K-factor you can't see: shares sent, opens and joins per share (09-analytics-attribution).",
+      "fix": "Add ?ref=<id> to every share link and count shares, opens and joins against it.",
+      "owner": "developer",
       "gates": []
     }
   ]

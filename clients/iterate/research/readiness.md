@@ -1,10 +1,10 @@
 # Readiness · iterate · 2026-11-09
 
-**Score 28/100** · paid spend **locked** · outbound **locked** · previous 28/100
+**Readiness 28/100** · **Loops 20/100** · paid spend **locked** · outbound **locked** · previous 28/100
 
 ## Blocking
 - LinkedIn Insight Tag with a conversion: Add the LinkedIn Insight Tag site-wide and a conversion for the form submit in Campaign Manager.
-- Every lead reaches the engine: Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`).
+- Every lead reaches the engine: Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own lead table into the engine (`mm import feed` / `mm import lead`).
 - Strategy approved by a human: Review research/strategy.md and approve it.
 - Machine and caps approved: Review machine.yaml and approve it.
 - Separate sending domains for cold email: Buy 2-3 lookalike domains, add them to audit.sendingDomains, and warm them for 2+ weeks.
@@ -27,7 +27,7 @@
 ## response
 | | check | severity | evidence | fix |
 |---|---|---|---|---|
-| ✗ | Every lead reaches the engine | blocker | Lead Desk on; lead endpoint not configured; 0 leads in store. | Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`). |
+| ✗ | Every lead reaches the engine | blocker | Lead Desk on; lead endpoint not configured; 0 leads in store. | Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own lead table into the engine (`mm import feed` / `mm import lead`). |
 | ? | Leads acknowledged within 10 minutes | major | No leads yet to measure. | Turn on the instant acknowledgement in lead-intake (RESEND_API_KEY + MM_FROM_EMAIL) and run Lead Desk on events. |
 | ✗ | Hot leads alert a human | minor | MM_ALERT_WEBHOOK not set. | Set MM_ALERT_WEBHOOK (Slack/Zapier/WhatsApp relay). |
 
@@ -42,7 +42,7 @@
 |---|---|---|---|---|
 | ✓ | Paid traffic has somewhere to convert | blocker | Site has a capture form. |  |
 | ? | Each ad motivation lands on a matching page | minor | No ads yet. | Run `mm run pages --input '{"motivationId":"<id>",...}'` for the unmatched motivations, or send them to the closest page. |
-| ✓ | Homepage responds fast and light | minor | 490 ms, 60 KB HTML. |  |
+| ✓ | Homepage responds fast and light | minor | 821 ms, 60 KB HTML. |  |
 
 ## promises
 | | check | severity | evidence | fix |
@@ -70,6 +70,15 @@
 | ✓ | Daily spend cap set | blocker | Daily cap 1500 INR. |  |
 | ✗ | Linkedin ad account in client.yaml | major | accounts.linkedin_ad_account not set. | Add accounts.linkedin_ad_account to client.yaml. |
 | ✗ | Writing samples for Param Minhas | minor | 0 characters in voice/param.md. | Paste 10-20 real posts or messages by Param Minhas into voice/param.md. |
+
+## loops
+| | check | severity | evidence | fix |
+|---|---|---|---|---|
+| ✗ | Referral with a reward for both sides | minor | No referral or invite code found. | Ask happy clients for one named intro at the moment of delivery, with a thank-you that's worth their time. |
+| ✗ | Share prompt right after someone buys or signs up | minor | No share flow found. | On the confirmation screen and in the confirmation email, offer a one-tap share (image card plus link that carries their invite code). |
+| ✓ | Loyalty that rewards coming back | minor | Seen in: app/industries/[slug]/page.tsx |  |
+| ✗ | Something of value on day one | minor | No welcome credit or first-purchase offer found. | Give new members a small credit, a guaranteed spot or a first-order perk, tied to completing the first real action. |
+| ✗ | Shares and invites are counted | minor | Share links don't carry a ref, so the loop can't be measured. | Add ?ref=<id> to every share link and count shares, opens and joins against it. |
 
 ## Evidence sources
 - live: https://hyperiterate.com

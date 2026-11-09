@@ -129,7 +129,7 @@ export default defineProduct({
       client: ctx.client.slug,
       window: { since: ev.since, days: input.days },
       commitments,
-      leaks: { fixed: fixedLeaks.map((c) => c.title), open: openLeaks.length, score: latest?.score, previousScore: before?.score, spendUnlocked: latest?.spendUnlocked },
+      leaks: { fixed: fixedLeaks.map((c) => c.title), open: openLeaks.length, score: latest?.score, previousScore: before?.score, loopsScore: latest?.loopsScore, spendUnlocked: latest?.spendUnlocked },
       audience: { total: totalContacts, newInWindow: winLeads.length, growthPct, medianAckMin: median(acked) },
       paid: { spend, results, clicks, costPerResult: results ? spend / results : null },
       benchmarks,
@@ -142,7 +142,7 @@ export default defineProduct({
     const ico = { met: "✓", close: "~", missed: "✗", "n/a": "·" } as Record<string, string>;
     const md = [
       `# Proof · ${ctx.client.name} · week to ${today()}`,
-      `**Commitments met ${met}/${commitments.length}** · readiness ${latest?.score ?? "-"}/100${before ? ` (was ${before.score})` : ""} · paid ${latest?.spendUnlocked ? "unlocked" : "locked"} · new contacts ${winLeads.length}${Number.isFinite(growthPct) ? ` (+${growthPct.toFixed(0)}%)` : ""}`,
+      `**Commitments met ${met}/${commitments.length}** · readiness ${latest?.score ?? "-"}/100${before ? ` (was ${before.score})` : ""}${latest?.loopsScore !== undefined ? ` · loops ${latest.loopsScore}/100` : ""} · paid ${latest?.spendUnlocked ? "unlocked" : "locked"} · new contacts ${winLeads.length}${Number.isFinite(growthPct) ? ` (+${growthPct.toFixed(0)}%)` : ""}`,
       `## Commitments (inputs the engine controls)\n| | commitment | target | delivered |\n|---|---|---|---|\n${commitments.map((c) => `| ${ico[c.status]} | ${c.metric.replace(/_/g, " ")} (per ${c.period}) | ${c.target} | ${Number.isNaN(c.delivered) ? "no leads" : c.delivered} |`).join("\n") || "| | none set | | |"}`,
       `## Leaks\n${fixedLeaks.length ? `Fixed this week:\n${fixedLeaks.map((c) => `- ✓ ${c.title}`).join("\n")}\n\n` : ""}${openLeaks.length} still open. Top 3:\n${openLeaks
         .sort((a, b) => ["blocker", "major", "minor"].indexOf(a.severity) - ["blocker", "major", "minor"].indexOf(b.severity))

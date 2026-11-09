@@ -3,7 +3,7 @@
 // Deterministic by design: no model call, same funnel → same verdict.
 import { defineProduct, z, Readiness, Strategy, loadDoc, saveDoc, writeFile, type CheckResult } from "@mm/core";
 import { gatherEvidence, type Evidence } from "./evidence.ts";
-import { runChecks, score, gateOpen } from "./checks.ts";
+import { runChecks, score, loopsScore, gateOpen } from "./checks.ts";
 import { writeFixKit, openingPlaybook } from "./fixkit.ts";
 
 const Input = z.object({
@@ -19,7 +19,7 @@ function md(r: Readiness, previous: Readiness | undefined, fixes: string[]): str
   const cats = [...new Set(r.checks.map((c) => c.category))];
   return [
     `# Readiness · ${r.client} · ${r.at.slice(0, 10)}`,
-    `**Score ${r.score}/100** · paid spend ${r.spendUnlocked ? "**unlocked**" : "**locked**"} · outbound ${r.outboundUnlocked ? "**unlocked**" : "**locked**"}${previous ? ` · previous ${previous.score}/100` : ""}`,
+    `**Readiness ${r.score}/100**${r.loopsScore !== undefined ? ` · **Loops ${r.loopsScore}/100**` : ""} · paid spend ${r.spendUnlocked ? "**unlocked**" : "**locked**"} · outbound ${r.outboundUnlocked ? "**unlocked**" : "**locked**"}${previous ? ` · previous ${previous.score}/100` : ""}`,
     r.blockers.length ? `## Blocking\n${r.blockers.map((b) => `- ${b}`).join("\n")}` : "",
     fixed.length ? `## Fixed since last audit\n${fixed.map((c) => `- ${c.title}`).join("\n")}` : "",
     regressed.length ? `## Regressed\n${regressed.map((c) => `- ${c.title}`).join("\n")}` : "",
@@ -42,7 +42,7 @@ export default defineProduct({
   manifest: {
     id: "auditor",
     name: "Auditor",
-    job: "Check the funnel for known leaks before any money is spent, score readiness, lock or unlock paid spend and outbound, and write the fixes.",
+    job: "Check the funnel for known leaks before any money is spent, score readiness and loops, lock or unlock paid spend and outbound, and write the fixes.",
     defaultAutonomy: "A0",
     defaultSchedule: "5 8 * * 1 (weekly) + before every campaign",
     reads: ["live site + robots/sitemap/llms.txt", "inputs/auditor/* (saved pages)", "client.audit.codebase", "machine.yaml", "assets", "leads", "DNS for sending domains"],
@@ -77,6 +77,7 @@ export default defineProduct({
       client: ctx.client.slug,
       at: new Date().toISOString(),
       score: score(checks),
+      loopsScore: loopsScore(checks),
       spendUnlocked: spend.open,
       outboundUnlocked: outbound.open,
       blockers: [...new Set([...spend.blockers, ...outbound.blockers].map((c) => `${c.title}: ${c.fix}`))],
@@ -90,5 +91,5 @@ export default defineProduct({
   },
 
   summarize: (o) =>
-    `readiness ${o.readiness.score}/100${o.previousScore !== undefined ? ` (was ${o.previousScore})` : ""} · spend ${o.readiness.spendUnlocked ? "unlocked" : "locked"} · outbound ${o.readiness.outboundUnlocked ? "unlocked" : "locked"} · ${o.readiness.checks.filter((c) => c.status !== "pass").length} open items`,
+    `readiness ${o.readiness.score}/100${o.previousScore !== undefined ? ` (was ${o.previousScore})` : ""}${o.readiness.loopsScore !== undefined ? ` · loops ${o.readiness.loopsScore}/100` : ""} · spend ${o.readiness.spendUnlocked ? "unlocked" : "locked"} · outbound ${o.readiness.outboundUnlocked ? "unlocked" : "locked"} · ${o.readiness.checks.filter((c) => c.status !== "pass").length} open items`,
 });

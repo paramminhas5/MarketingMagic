@@ -4,6 +4,7 @@
 //   3. the site's source code, if client.audit.codebase points at it
 //   4. the engine's own state (machine, strategy, assets, leads, env)
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { extname, join, relative } from "node:path";
 import { tools, readInputs, type Ctx, type Asset, type Lead } from "@mm/core";
 
@@ -24,6 +25,10 @@ export interface CodeEvidence {
   /** path -> content (truncated) */
   corpus: Map<string, string>;
   paths: string[];
+  /** Files that differ from the repo's default branch (built, not shipped). Empty when on the default branch or not a git repo. */
+  unshipped: Set<string>;
+  /** Checked-out branch when it is not the default branch. */
+  branch?: string;
 }
 
 export interface EngineEvidence {
@@ -82,7 +87,24 @@ function walk(root: string, maxFiles = 4000, maxBytes = 25_000_000): CodeEvidenc
       }
     }
   }
-  return { root, files: paths.length, corpus, paths };
+  return { root, files: paths.length, corpus, paths, ...unshippedFiles(root) };
+}
+
+/** What the checked-out branch has that the default (deployed) branch doesn't, so built-but-unshipped work isn't scored as live. */
+function unshippedFiles(root: string): { unshipped: Set<string>; branch?: string } {
+  const git = (...args: string[]) => execFileSync("git", ["-C", root, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  try {
+    const branch = git("rev-parse", "--abbrev-ref", "HEAD");
+    let base = "";
+    try { base = git("symbolic-ref", "--short", "refs/remotes/origin/HEAD"); } catch {}
+    if (!base) for (const b of ["origin/main", "origin/master", "main", "master"]) { try { git("rev-parse", "--verify", b); base = b; break; } catch {} }
+    const files = new Set<string>(git("ls-files", "--others", "--exclude-standard").split("\n").filter(Boolean));
+    if (base && base.replace(/^origin\//, "") !== branch) for (const f of git("diff", "--name-only", `${base}...HEAD`).split("\n").filter(Boolean)) files.add(f);
+    for (const f of git("diff", "--name-only", "HEAD").split("\n").filter(Boolean)) files.add(f);
+    return { unshipped: files, branch: base && base.replace(/^origin\//, "") !== branch ? branch : undefined };
+  } catch {
+    return { unshipped: new Set() };
+  }
 }
 
 async function web(ctx: Ctx): Promise<WebEvidence> {
@@ -115,7 +137,7 @@ export async function gatherEvidence(ctx: Ctx, opts: { offline?: boolean } = {})
     ? { pages: [], saved: readInputs(ctx.client.slug, "auditor", 60_000), text: Object.values(readInputs(ctx.client.slug, "auditor", 60_000)).join("\n"), reachable: false }
     : await web(ctx);
   const root = ctx.client.audit.codebase;
-  const code = root && existsSync(root) ? walk(root) : { files: 0, corpus: new Map<string, string>(), paths: [] };
+  const code: CodeEvidence = root && existsSync(root) ? walk(root) : { files: 0, corpus: new Map<string, string>(), paths: [], unshipped: new Set() };
   const assets = await ctx.store.list<Asset>("assets");
   const leads = await ctx.store.list<Lead>("leads");
   const voiceCorpusChars: Record<string, number> = {};
@@ -126,7 +148,7 @@ export async function gatherEvidence(ctx: Ctx, opts: { offline?: boolean } = {})
   const sources = [
     ...w.pages.filter((p) => p.ok).map((p) => `live: ${p.url}`),
     ...Object.keys(w.saved).map((f) => `saved: inputs/auditor/${f}`),
-    ...(code.files ? [`codebase: ${root} (${code.files} files)`] : []),
+    ...(code.files ? [`codebase: ${root} (${code.files} files${code.branch ? `, branch ${code.branch}; ${code.unshipped.size} files not on the default branch count as not live` : ""})`] : []),
     "engine state",
   ];
   return {

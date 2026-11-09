@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
-import type { Asset } from "@mm/core";
+import type { Asset, Lead } from "@mm/core";
 
 const repo = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const root = mkdtempSync(join(tmpdir(), "mm-smoke-"));
@@ -215,6 +215,35 @@ async function finishPendingFor(slug: string, id: string, answer: unknown) {
   const files = core.pendingFiles(slug).filter((f) => f.includes(`/${id}-`));
   assert.equal(files.length, 1);
   return core.submitPending((pid) => product(pid), files[0], answer);
+}
+
+// leads feed: conversions import once, and response times fill in on a later import
+{
+  const { execFileSync } = await import("node:child_process");
+  const { writeFileSync } = await import("node:fs");
+  const cli = join(repo, "engine", "src", "cli.ts");
+  const feed = join(root, "feed.json");
+  const now = Date.now();
+  const row = (id: string, source: string, extra: Record<string, unknown> = {}) => ({ id, source, email: `${id}@example.test`, created_at: new Date(now - 6e5).toISOString(), heard_from: "a friend", ...extra });
+  writeFileSync(feed, JSON.stringify([row("order_1", "ticket_paid", { acked_at: new Date(now - 5.5e5).toISOString() }), row("contact_1", "contact")]));
+  const mmRun = (...a: string[]) => execFileSync(process.execPath, ["--import", "tsx", cli, ...a, "--client", "acme"], { env: { ...process.env, MM_ROOT: root }, encoding: "utf8" });
+  mmRun("import", "feed", feed);
+  writeFileSync(feed, JSON.stringify([row("contact_1", "contact", { responded_at: new Date(now - 3e5).toISOString() })]));
+  const out = mmRun("import", "feed", feed);
+  assert.match(out, /response times added to 1/);
+  const leads = await core.openStore("acme").list<Lead>("leads");
+  assert.ok(leads.find((l) => l.id === "order_1")?.ackAt, "ack time from acked_at");
+  assert.equal(leads.find((l) => l.id === "order_1")?.status, "won");
+  assert.ok(leads.find((l) => l.id === "contact_1")?.firstResponseAt, "response time filled on re-import");
+  console.log("✓ leads feed imports with speed-to-lead times");
+
+  const { connectReport } = await import("../src/connect.ts");
+  const c = await connectReport("acme");
+  assert.ok(c.items.some((i) => i.area === "Leads" && i.ok === true), "lead endpoint counts as connected");
+  assert.ok(existsSync(c.path));
+  const r2 = JSON.parse(readFileSync(join(root, "clients/acme/research/readiness.json"), "utf8"));
+  assert.ok(typeof r2.loopsScore === "number" || r2.checks.every((x: { category: string }) => x.category !== "loops"), "loops scored separately");
+  console.log(`✓ mm connect lists ${c.items.filter((i) => i.ok === false).length} to-dos`);
 }
 
 const runs = JSON.parse(readFileSync(join(root, "clients/acme/data/runs.json"), "utf8"));

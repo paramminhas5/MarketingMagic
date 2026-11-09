@@ -1,6 +1,6 @@
 # Auditor (`@mm/auditor`)
 
-Check the funnel for known leaks before any money is spent, score readiness, lock or unlock paid spend and outbound, and write the fixes.
+Check the funnel for known leaks before any money is spent, score readiness and loops, lock or unlock paid spend and outbound, and write the fixes.
 
 Standalone: `npm start -w @mm/auditor -- --client <slug> [--input '<json>']` or `mm run auditor --client <slug>`.
 Inside the engine it is called by the Conductor (`mm onboard`, `mm campaign`, `mm cycle`).

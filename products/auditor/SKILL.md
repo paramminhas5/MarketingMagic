@@ -1,11 +1,11 @@
 ---
 name: mm-auditor
-description: Marketing Magic Auditor. Check the funnel for known leaks before any money is spent, score readiness, lock or unlock paid spend and outbound, and write the fixes. Use when asked to run auditor for a client (Iterate, Cats Can Dance or any client in clients/).
+description: Marketing Magic Auditor. Check the funnel for known leaks before any money is spent, score readiness and loops, lock or unlock paid spend and outbound, and write the fixes. Use when asked to run auditor for a client (Iterate, Cats Can Dance or any client in clients/).
 ---
 
 # Auditor
 
-**Job:** Check the funnel for known leaks before any money is spent, score readiness, lock or unlock paid spend and outbound, and write the fixes.
+**Job:** Check the funnel for known leaks before any money is spent, score readiness and loops, lock or unlock paid spend and outbound, and write the fixes.
 
 Default autonomy **A0** · default schedule `5 8 * * 1 (weekly) + before every campaign`. The client's `machine.yaml` overrides both.
 

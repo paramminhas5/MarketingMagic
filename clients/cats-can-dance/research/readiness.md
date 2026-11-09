@@ -1,12 +1,15 @@
 # Readiness · cats-can-dance · 2026-11-09
 
-**Score 34/100** · paid spend **locked** · outbound **locked** · previous 34/100
+**Readiness 34/100** · **Loops 69/100** · paid spend **locked** · outbound **locked** · previous 34/100
 
 ## Blocking
 - Meta pixel sends conversion events: Install the Meta pixel with the real conversion event (RSVP / Lead / Purchase) and verify it in Events Manager. Snippet in out/fixes/meta-pixel.md.
 - Every lead reaches the engine: Pull the site's conversions from supabase://jybloszaucgqlbkzquqw/marketing.leads_feed into the engine (`mm import feed`, see the Lead Desk skill). Needs the feed to exist and a human OK to read lead data.
 - Strategy approved by a human: Review research/strategy.md and approve it.
 - Machine and caps approved: Review machine.yaml and approve it.
+
+## Regressed
+- Referral with a reward for both sides
 
 ## tracking
 | | check | severity | evidence | fix |
@@ -41,7 +44,7 @@
 |---|---|---|---|---|
 | ✓ | Paid traffic has somewhere to convert | blocker | Site has a capture form. |  |
 | ? | Each ad motivation lands on a matching page | minor | No ads yet. | Run `mm run pages --input '{"motivationId":"<id>",...}'` for the unmatched motivations, or send them to the closest page. |
-| ✓ | Homepage responds fast and light | minor | 194 ms, 172 KB HTML. |  |
+| ✓ | Homepage responds fast and light | minor | 179 ms, 172 KB HTML. |  |
 
 ## promises
 | | check | severity | evidence | fix |
@@ -65,6 +68,15 @@
 | ✗ | Meta ad account in client.yaml | major | accounts.meta_ad_account not set. | Add accounts.meta_ad_account to client.yaml (act_<id>). |
 | ✗ | Writing samples for Param Minhas | minor | 0 characters in voice/param.md. | Paste 10-20 real posts or messages by Param Minhas into voice/param.md. |
 
+## loops
+| | check | severity | evidence | fix |
+|---|---|---|---|---|
+| ! | Referral with a reward for both sides | major | Built on branch grow/points but not shipped yet: supabase/migrations/063_points.sql, src/lib/points.ts, src/components/points/PointsCard.tsx. Merge and deploy (and apply any migration) to pass. | Give every customer a personal invite link; reward both sides once the friend actually buys or shows up, not on signup. |
+| ✓ | Share prompt right after someone buys or signs up | major | Seen in: src/components/tickets/NightTools.tsx |  |
+| ! | Loyalty that rewards coming back | major | Built on branch grow/points but not shipped yet: supabase/migrations/063_points.sql, src/lib/points.ts. Merge and deploy (and apply any migration) to pass. | Points from verified purchases or visits, a clear next reward, and status tiers. Derive points from records you already trust so they can't be gamed. |
+| ! | Something of value on day one | minor | Built on branch grow/points but not shipped yet: supabase/migrations/063_points.sql, pages/points.tsx. Merge and deploy (and apply any migration) to pass. | Give new members a small credit, a guaranteed spot or a first-order perk, tied to completing the first real action. |
+| ✓ | Shares and invites are counted | minor | Seen in: supabase/migrations/048_loops.sql |  |
+
 ## Evidence sources
 - live: https://catscandance.com
 - live: https://catscandance.com/nights
@@ -72,7 +84,7 @@
 - live: https://catscandance.com/artists
 - live: https://catscandance.com/promote
 - live: https://catscandance.com/gate
-- codebase: /home/claude/catscandanceoct2026 (682 files)
+- codebase: /home/claude/catscandanceoct2026 (688 files, branch grow/points; 14 files not on the default branch count as not live)
 - engine state
 
 ## Fix kit written

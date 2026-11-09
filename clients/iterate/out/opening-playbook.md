@@ -17,11 +17,15 @@ Fix leaks before buying traffic. These recover demand you already have, which ma
 - [ ] **Hot leads alert a human** (minor) · Set MM_ALERT_WEBHOOK (Slack/Zapier/WhatsApp relay).
 - [ ] **Writing samples for Param Minhas** (minor) · Paste 10-20 real posts or messages by Param Minhas into voice/param.md.
 
-## Needs a developer (7)
+## Needs a developer (11)
 - [ ] **LinkedIn Insight Tag with a conversion** (blocker, blocks spend) · Add the LinkedIn Insight Tag site-wide and a conversion for the form submit in Campaign Manager.
-- [ ] **Every lead reaches the engine** (blocker, blocks spend+outbound) · Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`). → `supabase/functions/lead-intake`
+- [ ] **Every lead reaches the engine** (blocker, blocks spend+outbound) · Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own lead table into the engine (`mm import feed` / `mm import lead`). → `supabase/functions/lead-intake`
 - [ ] **'How did you hear about us' on every high-intent form** (major) · Add a required free-text field to RSVP, signup, booking and contact forms and pass it to the lead store. Snippet in out/fixes/hdyhau-field.html. → `out/fixes/hdyhau-field.html`
 - [ ] **Meta pixel sends conversion events** (minor) · Install the Meta pixel with the real conversion event (RSVP / Lead / Purchase) and verify it in Events Manager. Snippet in out/fixes/meta-pixel.md. → `out/fixes/meta-pixel.md`
 - [ ] **Server-side Conversions API** (minor) · Send the same conversion event server-side from the RSVP/lead/checkout handler with event_id dedup. Notes in out/fixes/meta-pixel.md. → `out/fixes/meta-pixel.md`
 - [ ] **Site analytics installed** (minor) · Turn on Vercel Analytics or GA4 (or set the Plausible domain if the code already supports it).
 - [ ] **WhatsApp entry or opt-in** (minor) · Add a WhatsApp opt-in to forms and a click-to-chat button on landing pages.
+- [ ] **Referral with a reward for both sides** (minor) · Ask happy clients for one named intro at the moment of delivery, with a thank-you that's worth their time.
+- [ ] **Share prompt right after someone buys or signs up** (minor) · On the confirmation screen and in the confirmation email, offer a one-tap share (image card plus link that carries their invite code).
+- [ ] **Something of value on day one** (minor) · Give new members a small credit, a guaranteed spot or a first-order perk, tied to completing the first real action.
+- [ ] **Shares and invites are counted** (minor) · Add ?ref=<id> to every share link and count shares, opens and joins against it.

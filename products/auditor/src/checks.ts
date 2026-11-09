@@ -489,6 +489,76 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
     }
   }
 
+  // ------------------------------------------------------------ loops
+  // A second score: does each customer bring the next one? These never lock spend; they decide how far
+  // each rupee of paid goes. Consumer and creator businesses live on repeat visits and friends, so they weigh more.
+  if (haveWebOrCode) {
+    const consumer = ctx.client.playbook !== "b2b_service";
+    const loop = (c: Omit<Check, "category" | "gates" | "owner"> & { owner?: Check["owner"] }) => checks.push({ owner: "developer", ...c, category: "loops", gates: [] });
+    // Real code only (no docs or data dumps), and code that isn't on the deployed branch yet only earns a warn.
+    const CODE_ONLY = /^(?!data\/|docs?\/)(?!.*\.(md|txt)$)/;
+    const judge = (hits: string[], none: string): { status: CheckResult["status"]; evidence: string } => {
+      const live = hits.filter((h) => h === "site" || !ev.code.unshipped.has(h));
+      if (live.length) return { status: "pass", evidence: where(live) };
+      if (hits.length) return { status: "warn", evidence: `Built${ev.code.branch ? ` on branch ${ev.code.branch}` : ""} but not shipped yet: ${hits.slice(0, 3).join(", ")}. Merge and deploy (and apply any migration) to pass.` };
+      return { status: "fail", evidence: none };
+    };
+    const ref = seen(ev, /ref(erral)?_code|referred_by|refer[\s-]a[\s-]friend|claim_referral|referral[\s_-]?(program|reward|bonus|points|credit)|invite[\s_-]?(reward|bonus|credit|points)/i, { codePathFilter: CODE_ONLY });
+    loop({
+      id: "loops.referral",
+      title: "Referral with a reward for both sides",
+      severity: consumer ? "major" : "minor",
+      ...judge(ref, "No referral or invite code found."),
+      why: "A friend's invite converts far better than an ad, and a two-sided reward is what gets the invite sent (01-demand-creation, 06-lifecycle-retention).",
+      fix: consumer
+        ? "Give every customer a personal invite link; reward both sides once the friend actually buys or shows up, not on signup."
+        : "Ask happy clients for one named intro at the moment of delivery, with a thank-you that's worth their time.",
+    });
+    const shareFiles = seen(ev, /navigator\.share|wa\.me\/\?text|shareCard|share[_-]?sheet|whatsapp:\/\/send/i, { web: false, codePathFilter: CODE_ONLY });
+    const afterBuy = shareFiles.filter((f) => /ticket|confirm|thank|success|order|booked|pass|receipt|rsvp/i.test(f));
+    loop({
+      id: "loops.share_after_conversion",
+      title: "Share prompt right after someone buys or signs up",
+      severity: consumer ? "major" : "minor",
+      ...(afterBuy.length
+        ? judge(afterBuy, "")
+        : shareFiles.length
+          ? { status: "warn" as const, evidence: `Share exists (${shareFiles.slice(0, 3).join(", ")}) but not on a confirmation, ticket or thank-you screen.` }
+          : { status: "fail" as const, evidence: "No share flow found." }),
+      why: "Intent to tell people peaks in the minute after a purchase; a share card with their name on it there is the cheapest reach a brand gets (01, 07).",
+      fix: "On the confirmation screen and in the confirmation email, offer a one-tap share (image card plus link that carries their invite code).",
+    });
+    const loyalty = seen(ev, /loyalty|points[_\s-]?(balance|rules|ledger|perks)|my_points|reward[s]?[_\s-]?(program|balance)|stamp[_\s-]?card|punch[_\s-]?card|membership[_\s-]?tier/i, { codePathFilter: CODE_ONLY });
+    loop({
+      id: "loops.loyalty",
+      title: "Loyalty that rewards coming back",
+      severity: consumer ? "major" : "minor",
+      ...judge(loyalty, "No points, tiers or rewards found."),
+      why: "Repeat customers cost nothing to acquire; a visible balance and a next reward turn one visit into a habit (06-lifecycle-retention).",
+      fix: consumer
+        ? "Points from verified purchases or visits, a clear next reward, and status tiers. Derive points from records you already trust so they can't be gamed."
+        : "A retainer or volume tier that makes the second project cheaper to say yes to.",
+    });
+    const dayOne = seen(ev, /welcome[_\s-]?(bonus|credit|offer|discount)|first[_\s-]?(order|ticket|booking|night)[_\s-]?(free|off|discount)|referral_friend|signup[_\s-]?(bonus|credit)|starter[_\s-]?credit/i, { codePathFilter: CODE_ONLY });
+    loop({
+      id: "loops.day_one",
+      title: "Something of value on day one",
+      severity: "minor",
+      ...judge(dayOne, "No welcome credit or first-purchase offer found."),
+      why: "New members who get value in the first session come back; an empty account on day one is the most common leak in retention (06).",
+      fix: "Give new members a small credit, a guaranteed spot or a first-order perk, tied to completing the first real action.",
+    });
+    const measured = seen(ev, /log_share|utm_source=(share|referral|invite)|[?&]ref=|share[_\s-]?(opens|events|count)/i, { web: false, codePathFilter: CODE_ONLY });
+    loop({
+      id: "loops.measured",
+      title: "Shares and invites are counted",
+      severity: "minor",
+      ...judge(measured, "Share links don't carry a ref, so the loop can't be measured."),
+      why: "You can't tune a K-factor you can't see: shares sent, opens and joins per share (09-analytics-attribution).",
+      fix: "Add ?ref=<id> to every share link and count shares, opens and joins against it.",
+    });
+  }
+
   // attestations: a human confirms what the engine can't see
   return checks.map((c) => {
     const note = ctx.client.audit.attest[c.id];
@@ -501,7 +571,9 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
 const W = { blocker: 3, major: 2, minor: 1 } as const;
 const V = { pass: 1, warn: 0.5, fail: 0, unknown: 0 } as const;
 
-export function score(checks: CheckResult[]): number {
+/** Readiness score. Loops checks are scored separately with loopsScore. */
+export function score(all: CheckResult[]): number {
+  const checks = all.filter((c) => c.category !== "loops");
   const tot = checks.reduce((a, c) => a + W[c.severity], 0);
   const got = checks.reduce((a, c) => a + W[c.severity] * V[c.status], 0);
   return tot ? Math.round((100 * got) / tot) : 0;
@@ -510,4 +582,9 @@ export function score(checks: CheckResult[]): number {
 export function gateOpen(checks: CheckResult[], gate: "spend" | "outbound"): { open: boolean; blockers: CheckResult[] } {
   const blockers = checks.filter((c) => c.gates.includes(gate) && c.severity === "blocker" && c.status !== "pass" && c.status !== "warn");
   return { open: blockers.length === 0, blockers };
+}
+
+export function loopsScore(all: CheckResult[]): number | undefined {
+  const loops = all.filter((c) => c.category === "loops");
+  return loops.length ? score(loops.map((c) => ({ ...c, category: "strategy" as const }))) : undefined;
 }

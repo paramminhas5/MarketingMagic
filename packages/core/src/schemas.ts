@@ -362,7 +362,7 @@ export type CheckStatus = z.infer<typeof CheckStatus>;
 
 export const CheckResult = z.object({
   id: z.string(),
-  category: z.enum(["tracking", "capture", "response", "lifecycle", "conversion", "promises", "discoverability", "deliverability", "strategy"]),
+  category: z.enum(["tracking", "capture", "response", "lifecycle", "conversion", "promises", "discoverability", "deliverability", "strategy", "loops"]),
   title: z.string(),
   severity: z.enum(["blocker", "major", "minor"]),
   status: CheckStatus,
@@ -378,7 +378,8 @@ export type CheckResult = z.infer<typeof CheckResult>;
 export const Readiness = z.object({
   client: z.string(),
   at: z.string(),
-  score: z.number().min(0).max(100),
+  score: z.number().min(0).max(100).describe("Readiness: does money leak out of the funnel? Loops checks are not counted here."),
+  loopsScore: z.number().min(0).max(100).optional().describe("Loops: does each customer bring the next one? Referral, share after buying, loyalty, day-one credit."),
   spendUnlocked: z.boolean(),
   outboundUnlocked: z.boolean(),
   blockers: z.array(z.string()),
