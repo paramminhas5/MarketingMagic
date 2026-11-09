@@ -25,6 +25,7 @@ const Input = z.object({
 
 const Answer = z.object({
   products: z.array(MachineProduct),
+  commitments: Machine.shape.commitments,
   kpis: z.array(z.object({ name: z.string(), target: z.string() })),
   weeklyRhythm: z.array(z.string()),
   rationale: z.string(),
@@ -32,6 +33,10 @@ const Answer = z.object({
 
 // Non-negotiables from the research and architecture, applied after the model answers.
 const LOCKS: Partial<Record<ProductId, { enabled?: boolean; maxAutonomy?: "A0" | "A1" | "A2" | "A3"; minAutonomy?: "A2" | "A3" }>> = {
+  intake: { enabled: false },
+  auditor: { enabled: true },
+  planner: { enabled: true },
+  proof: { enabled: true },
   gatekeeper: { enabled: true },
   analyst: { enabled: true },
   "lead-desk": { enabled: true },
@@ -41,6 +46,16 @@ const LOCKS: Partial<Record<ProductId, { enabled?: boolean; maxAutonomy?: "A0" |
   architect: { minAutonomy: "A2" },
 };
 const rank = { A0: 0, A1: 1, A2: 2, A3: 3 } as const;
+
+// Schedules for the always-on core when the model doesn't specify them.
+export const CORE_DEFAULTS: Partial<Record<ProductId, Partial<MachineProduct>>> = {
+  auditor: { schedule: "5 8 * * 1", autonomy: "A0", notes: "Weekly readiness audit; gates spend and outbound" },
+  planner: { schedule: "9 8 1 * *", autonomy: "A0", notes: "Monthly test plan from budget and observed costs" },
+  proof: { schedule: "33 8 * * 1", autonomy: "A0", notes: "Weekly commitments vs delivered" },
+  analyst: { schedule: "3 8 * * 1", autonomy: "A0" },
+  gatekeeper: { schedule: "after every production run", autonomy: "A0" },
+  "lead-desk": { schedule: "event", autonomy: "A1" },
+};
 
 export default defineProduct({
   manifest: {
@@ -79,6 +94,8 @@ export default defineProduct({
         "Autonomy: A0 auto, A1 auto within caps, A2 human approves, A3 human only. Start conservative; autonomy is earned later.",
         "Caps are numbers: e.g. media-buyer {dailySpend, budgetShiftPct}, hunter {sendsPerMailboxPerDay, newContactsPerWeek}, studio {conceptsPerWeek}.",
         "Enable only what the strategy's channels need. A creator/media brand without B2B buyers should not run hunter.",
+        "auditor, planner, proof, gatekeeper, analyst and lead-desk are always on. intake is on-demand.",
+        "Write commitments: the inputs the engine promises each week or month (ad_concepts, voice_drafts, social_posts, pages, sequences, flows, leads_answered_10min_pct, audits, memos), sized to the caps.",
       ]),
       prompt: [
         asJson("strategy", ev.strategy),
@@ -94,6 +111,8 @@ export default defineProduct({
     const products = PRODUCT_IDS.map((id) => {
       const p: MachineProduct = byId.get(id) ?? { id, enabled: false, schedule: "on-demand", autonomy: "A2", caps: {}, notes: "" };
       const lock = LOCKS[id];
+      const d = CORE_DEFAULTS[id];
+      if (d && !byId.has(id)) Object.assign(p, d);
       if (lock?.enabled !== undefined) p.enabled = lock.enabled;
       if (lock?.minAutonomy && rank[p.autonomy] < rank[lock.minAutonomy]) p.autonomy = lock.minAutonomy;
       return p;
@@ -110,6 +129,7 @@ export default defineProduct({
       approvers: input.approvers ?? ctx.client.voices.slice(0, 1).map((v) => v.id),
       kpis: a.kpis,
       weeklyRhythm: a.weeklyRhythm,
+      commitments: a.commitments ?? [],
     });
     writeYaml(ctx.path("machine.yaml"), machine);
 

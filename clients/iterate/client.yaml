@@ -1,46 +1,56 @@
-# Iterate · first-party client of the engine (the agency itself).
 slug: iterate
 name: Iterate
 url: https://hyperiterate.com
 playbook: b2b_service
-description: >
-  Iterate is an AI-native marketing agency founded by Param Minhas in Bengaluru (started Jan 2026).
-  It works through small AI-augmented pods instead of headcount, across five layers:
-  discovery (getting found by AI answer engines and search, via its AI Visibility Architecture and
-  GEO/AEO frameworks), capture (clipping, UGC and social, priced on outcomes), organic (measured on
-  referrals and return visits), paid (ads and creative) and community (recurring offline events),
-  plus branding and website rebuilds.
-geo: [Bengaluru, India, Global]
-icp: >
-  DRAFT, to be sharpened by Scout and Strategist: consumer and culture-led brands (D2C, mobility,
-  travel, lifestyle, apparel) with an existing marketing budget, whose growth depends on being
-  found and trusted, and who want an operator-led team rather than a large agency.
+description: 'Iterate is an AI-native marketing agency founded by Param Minhas in Bengaluru (started Jan 2026). It works through small AI-augmented pods instead of headcount, across five layers: discovery (getting found by AI answer engines and search, via its AI Visibility Architecture and GEO/AEO frameworks), capture (clipping, UGC and social, priced on outcomes), organic (measured on referrals and return visits), paid (ads and creative) and community (recurring offline events), plus branding and website rebuilds.
+
+  '
+geo:
+- Bengaluru
+- India
+- Global
+icp: 'DRAFT, to be sharpened by Scout and Strategist: consumer and culture-led brands (D2C, mobility, travel, lifestyle, apparel) with an existing marketing budget, whose growth depends on being found and trusted, and who want an operator-led team rather than a large agency.
+
+  '
 offers:
-  - name: AI Visibility audit
-    description: Audit of how the brand shows up in AI answers and search, with a prioritised fix plan.
-  - name: Growth pod
-    description: A small AI-augmented pod running discovery, capture, organic, paid and community for the brand.
-  - name: Brand and website rebuild
-    description: Branding and website rebuild with SEO/GEO infrastructure (structured data, llms.txt).
+- name: AI Visibility audit
+  description: Audit of how the brand shows up in AI answers and search, with a prioritised fix plan.
+- name: Growth pod
+  description: A small AI-augmented pod running discovery, capture, organic, paid and community for the brand.
+- name: Brand and website rebuild
+  description: Branding and website rebuild with SEO/GEO infrastructure (structured data, llms.txt).
 competitors: []
 voices:
-  - id: param
-    name: Param Minhas
-    role: Founder, creative director; 15+ years across AI, marketing, venture and consumer startups; co-founded SoleSearch
-    channels: [linkedin, instagram, newsletter]
-    rules:
-      - Plain and straightforward; sounds like Param, not over the top
-      - Never use em dashes
-      - Cut any line that exists to sound good rather than say something
-      - Don't name past clients publicly; describe them generically (NDA)
+- id: param
+  name: Param Minhas
+  role: Founder, creative director; 15+ years across AI, marketing, venture and consumer startups; co-founded SoleSearch
+  channels:
+  - linkedin
+  - instagram
+  - newsletter
+  rules:
+  - Plain and straightforward; sounds like Param, not over the top
+  - Never use em dashes
+  - Cut any line that exists to sound good rather than say something
+  - Don't name past clients publicly; describe them generically (NDA)
 brand:
   tone: Operator-led, specific, confident without hype
   rules:
-    - Never use em dashes in copy
-    - Describe client work generically unless a client has approved being named
+  - Never use em dashes in copy
+  - Describe client work generically unless a client has approved being named
   banned: []
-  colors: ["#0a0a0a", "#f4f1ea"]
+  colors:
+  - '#0a0a0a'
+  - '#f4f1ea'
 accounts: {}
 constraints:
-  - Client work is under NDA; no client names in public-facing material without approval
+- Client work is under NDA; no client names in public-facing material without approval
 currency: INR
+audit:
+  pages:
+  - contact
+  sendingDomains: []
+  knownIssues: []
+  attest: {}
+  codebase: /home/claude/paramminhas5/iterateblack-next
+draft: false

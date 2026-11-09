@@ -1,117 +1,166 @@
 client: cats-can-dance
 timezone: Asia/Kolkata
 products:
-  - id: scout
-    enabled: true
-    schedule: 7 9 1 * *
-    autonomy: A0
-    caps: {}
-    notes: Monthly refresh of competitors, Meta Ad Library and scene landscape
-  - id: strategist
-    enabled: true
-    schedule: on-demand
-    autonomy: A2
-    caps: {}
-    notes: Re-run monthly or when Analyst flags a shift
-  - id: architect
-    enabled: true
-    schedule: on-demand
-    autonomy: A2
-    caps: {}
-    notes: ""
-  - id: studio
-    enabled: true
-    schedule: 13 9 * * 1
-    autonomy: A1
-    caps:
-      conceptsPerWeek: 10
-    notes: 10 distinct concepts per Episode cycle across motivations; founder Reels scripts for Param to record
-  - id: voice
-    enabled: true
-    schedule: 23 8 * * 1
-    autonomy: A2
-    caps:
-      draftsPerWeek: 5
-    notes: Instagram captions and short scripts in Param's voice for the 150k page
-  - id: social
-    enabled: true
-    schedule: 17 10 * * 5
-    autonomy: A1
-    caps:
-      postsPerWeek: 7
-    notes: "CCD account: carousels for guides and drops, Reels for Episodes"
-  - id: search
-    enabled: true
-    schedule: 11 7 1 * *
-    autonomy: A2
-    caps:
-      pagesPerMonth: 4
-    notes: City scene guides, genre pages, on-site event pages
-  - id: pages
-    enabled: true
-    schedule: on-demand
-    autonomy: A2
-    caps: {}
-    notes: Episode RSVP and drop pages with HDYHAU + WhatsApp
-  - id: media-buyer
-    enabled: true
-    schedule: 37 9 * * *
-    autonomy: A1
-    caps:
-      dailySpend: 700
-      monthlySpend: 10000
-      budgetShiftPct: 20
-    notes: One consolidated Meta campaign per Episode window; created paused; pauses losers automatically
-  - id: hunter
-    enabled: false
-    schedule: on-demand
-    autonomy: A2
-    caps: {}
-    notes: Off for now; switch on later for venue and sponsor outreach
-  - id: lifecycle
-    enabled: true
-    schedule: on-demand
-    autonomy: A1
-    caps: {}
-    notes: Welcome, pre-Episode reminder, day-after recap, drop early access, lapsed fan
-  - id: lead-desk
-    enabled: true
-    schedule: event
-    autonomy: A1
-    caps: {}
-    notes: Codes HDYHAU on RSVPs and partner/artist enquiries
-  - id: gatekeeper
-    enabled: true
-    schedule: after every production run
-    autonomy: A0
-    caps: {}
-    notes: ""
-  - id: analyst
-    enabled: true
-    schedule: 3 8 * * 1
-    autonomy: A0
-    caps: {}
-    notes: Weekly memo; daily numbers only in Episode weeks
+- id: intake
+  enabled: false
+  schedule: on-demand
+  autonomy: A0
+  caps: {}
+  notes: ''
+- id: proof
+  enabled: true
+  schedule: 33 8 * * 1
+  autonomy: A0
+  caps: {}
+  notes: Weekly commitments vs delivered
+- id: planner
+  enabled: true
+  schedule: 9 8 1 * *
+  autonomy: A0
+  caps: {}
+  notes: Monthly test plan from budget and observed costs
+- id: auditor
+  enabled: true
+  schedule: 5 8 * * 1
+  autonomy: A0
+  caps: {}
+  notes: Weekly readiness audit; gates spend and outbound
+- id: scout
+  enabled: true
+  schedule: 7 9 1 * *
+  autonomy: A0
+  caps: {}
+  notes: Monthly refresh of competitors, Meta Ad Library and scene landscape
+- id: strategist
+  enabled: true
+  schedule: on-demand
+  autonomy: A2
+  caps: {}
+  notes: Re-run monthly or when Analyst flags a shift
+- id: architect
+  enabled: true
+  schedule: on-demand
+  autonomy: A2
+  caps: {}
+  notes: ''
+- id: studio
+  enabled: true
+  schedule: 13 9 * * 1
+  autonomy: A1
+  caps:
+    conceptsPerWeek: 10
+  notes: 10 distinct concepts per Episode cycle across motivations; founder Reels scripts for Param to record
+- id: voice
+  enabled: true
+  schedule: 23 8 * * 1
+  autonomy: A2
+  caps:
+    draftsPerWeek: 5
+  notes: Instagram captions and short scripts in Param's voice for the 150k page
+- id: social
+  enabled: true
+  schedule: 17 10 * * 5
+  autonomy: A1
+  caps:
+    postsPerWeek: 7
+  notes: 'CCD account: carousels for guides and drops, Reels for Episodes'
+- id: search
+  enabled: true
+  schedule: 11 7 1 * *
+  autonomy: A2
+  caps:
+    pagesPerMonth: 4
+  notes: City scene guides, genre pages, on-site event pages
+- id: pages
+  enabled: true
+  schedule: on-demand
+  autonomy: A2
+  caps: {}
+  notes: Episode RSVP and drop pages with HDYHAU + WhatsApp
+- id: media-buyer
+  enabled: true
+  schedule: 37 9 * * *
+  autonomy: A1
+  caps:
+    dailySpend: 700
+    monthlySpend: 10000
+    budgetShiftPct: 20
+  notes: One consolidated Meta campaign per Episode window; created paused; pauses losers automatically
+- id: hunter
+  enabled: false
+  schedule: on-demand
+  autonomy: A2
+  caps: {}
+  notes: Off for now; switch on later for venue and sponsor outreach
+- id: lifecycle
+  enabled: true
+  schedule: on-demand
+  autonomy: A1
+  caps: {}
+  notes: Welcome, pre-Episode reminder, day-after recap, drop early access, lapsed fan
+- id: lead-desk
+  enabled: true
+  schedule: event
+  autonomy: A1
+  caps: {}
+  notes: Codes HDYHAU on RSVPs and partner/artist enquiries
+- id: gatekeeper
+  enabled: true
+  schedule: after every production run
+  autonomy: A0
+  caps: {}
+  notes: ''
+- id: analyst
+  enabled: true
+  schedule: 3 8 * * 1
+  autonomy: A0
+  caps: {}
+  notes: Weekly memo; daily numbers only in Episode weeks
 budgets:
   currency: INR
   monthlyPaid: 10000
   dailyCap: 700
 approvers:
-  - param
+- param
 kpis:
-  - name: New owned contacts (RSVP + email + WhatsApp) per month
-    target: Baseline in month 1, then +20% month on month
-  - name: Cost per RSVP
-    target: Set after first 50 paid RSVPs
-  - name: Episode fill rate
-    target: 100% of cap
-  - name: Drop sell-through in 7 days
-    target: 80%+
-  - name: Artist profiles claimed
-    target: Track monthly
+- name: New owned contacts (RSVP + email + WhatsApp) per month
+  target: Baseline in month 1, then +20% month on month
+- name: Cost per RSVP
+  target: Set after first 50 paid RSVPs
+- name: Episode fill rate
+  target: 100% of cap
+- name: Drop sell-through in 7 days
+  target: 80%+
+- name: Artist profiles claimed
+  target: Track monthly
 weeklyRhythm:
-  - "Mon: Analyst memo, Studio concepts, Voice drafts to Param"
-  - "Tue: approvals; Media Buyer builds or refreshes the paused campaign"
-  - "Daily in Episode weeks: Media Buyer optimise, Lead Desk sweep"
-  - "Fri: Social plans next week"
-  - "Monthly: Scout refresh, Search pages, Strategist review"
+- 'Mon: Analyst memo, Studio concepts, Voice drafts to Param'
+- 'Tue: approvals; Media Buyer builds or refreshes the paused campaign'
+- 'Daily in Episode weeks: Media Buyer optimise, Lead Desk sweep'
+- 'Fri: Social plans next week'
+- 'Monthly: Scout refresh, Search pages, Strategist review'
+commitments:
+- metric: ad_concepts
+  target: 10
+  period: week
+- metric: voice_drafts
+  target: 5
+  period: week
+- metric: social_posts
+  target: 7
+  period: week
+- metric: pages
+  target: 4
+  period: month
+- metric: flows
+  target: 3
+  period: month
+- metric: leads_answered_10min_pct
+  target: 100
+  period: week
+- metric: audits
+  target: 1
+  period: week
+- metric: memos
+  target: 1
+  period: week

@@ -24,6 +24,8 @@ import {
 import { PRODUCTS, product } from "./registry.ts";
 import { onboard, campaign, cycle, loadBrief, runOne, type StepReport } from "./conductor.ts";
 import { generateSkills } from "./skills.ts";
+import { tick, autopilotPrompt } from "./autopilot.ts";
+import { repoRoot, readinessGate, makeCtx } from "@mm/core";
 
 // ---------------------------------------------------------------- args
 
@@ -65,14 +67,20 @@ const HELP = `mm · Marketing Magic
 Clients
   mm clients                               list clients (* = active)
   mm use <slug>                            switch active client
-  mm new <slug> --name "X" --url https://x --playbook consumer|b2b_service|creator_media [--description "..."]
+  mm new <slug> --url https://x            Intake fills the profile from the site on onboard
+  mm new <slug> --name "X" --url https://x --playbook consumer|b2b_service|creator_media
   mm status [--client slug]                docs, machine, assets, approvals, leads, pending steps
 
 Pipelines (the Conductor)
   mm onboard [--client slug] [--objective "..."] [--monthly 60000] [--daily 3000]
-                                           scout -> strategist -> architect (resumable)
+                                           intake -> scout -> strategist -> architect -> auditor -> planner (resumable)
   mm campaign <brief.yaml> [--client slug] production products in machine.yaml -> gatekeeper
   mm cycle [--client slug] [--target 250]  lead-desk -> gatekeeper -> analyst
+
+Autopilot
+  mm tick [--all | --client slug] [--dry]  run every product that's due per machine.yaml
+  mm autopilot                             the one scheduled-task prompt that runs everything
+  mm readiness [--client slug]             is spend / outbound unlocked, and why not
 
 Products (each works alone)
   mm products                              list products and their jobs
@@ -117,11 +125,45 @@ async function main() {
 
     case "new": {
       const slug = args[0];
-      if (!slug || !flags.name || !flags.playbook) throw new Error("mm new <slug> --name ... --playbook ... [--url ...]");
-      Playbook.parse(flags.playbook);
-      const dir = scaffoldClient(slug, { name: flags.name, url: flags.url, playbook: flags.playbook, description: flags.description });
+      if (!slug || (!flags.url && !flags.name)) throw new Error("mm new <slug> --url https://site  (or --name ... --playbook ...)");
+      const draft = !flags.name || !flags.playbook;
+      if (flags.playbook) Playbook.parse(flags.playbook);
+      const name = flags.name ?? new URL(flags.url).hostname.replace(/^www\./, "").split(".")[0];
+      const dir = scaffoldClient(slug, { name, url: flags.url, playbook: flags.playbook ?? "consumer", description: flags.description, draft });
       setActiveClient(slug);
-      console.log(`Created ${dir} and made it active.\nNext: fill in client.yaml (offers, competitors, voices), drop connector research into inputs/scout/, then run: mm onboard`);
+      console.log(
+        draft
+          ? `Created ${dir} (draft) and made it active.\nNext: mm onboard --monthly <budget> --daily <cap>\nIntake reads the site and fills client.yaml first.`
+          : `Created ${dir} and made it active.\nNext: fill in client.yaml, then: mm onboard --monthly <budget> --daily <cap>`,
+      );
+      return;
+    }
+
+    case "tick": {
+      const clients = flags.all === "true" ? undefined : [activeClient(flags.client)];
+      const items = await tick({ clients, dryRun: flags.dry === "true" });
+      if (!items.length) return console.log("Nothing due.");
+      for (const it of items) {
+        const r = it.report?.result;
+        const detail = r ? (r.status === "done" ? r.summary : r.status === "pending" ? `thinking step → ${r.pendingFile}` : r.reason) : it.reason;
+        console.log(`${it.action === "run" ? (r?.status === "pending" ? "…" : "✓") : "-"} ${it.client}/${it.product}: ${detail}`);
+      }
+      return;
+    }
+
+    case "autopilot": {
+      console.log(`Create ONE scheduled task (daily, e.g. 08:41 Asia/Kolkata) with this prompt:\n\n${autopilotPrompt(repoRoot())}\n\nThe tick reads every client's machine.yaml, so adding a client needs no new task.`);
+      return;
+    }
+
+    case "readiness": {
+      const slug = activeClient(flags.client);
+      for (const g of ["spend", "outbound"] as const) {
+        const r = readinessGate(makeCtx("auditor", slug), g);
+        console.log(`${g}: ${r.open ? "unlocked" : "LOCKED"}${r.score !== undefined ? ` (score ${r.score}/100)` : ""}`);
+        for (const reason of r.reasons) console.log(`  - ${reason}`);
+      }
+      console.log(`Details: clients/${slug}/research/readiness.md · plan: clients/${slug}/out/opening-playbook.md`);
       return;
     }
 

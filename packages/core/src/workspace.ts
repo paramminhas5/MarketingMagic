@@ -79,7 +79,7 @@ export function readInputs(slug: string, product: string, maxCharsPerFile = 8000
   for (const f of readdirSync(dir)) {
     const p = join(dir, f);
     if (!statSync(p).isFile()) continue;
-    if (![".json", ".md", ".txt", ".csv", ".yaml", ".yml"].includes(extname(f))) continue;
+    if (![".json", ".md", ".txt", ".csv", ".yaml", ".yml", ".html", ".htm"].includes(extname(f))) continue;
     out[f] = readFileSync(p, "utf8").slice(0, maxCharsPerFile);
   }
   return out;
@@ -91,7 +91,7 @@ export function readVoiceCorpus(slug: string, voiceId: string): string {
 }
 
 /** Create a new client folder from clients/_template. */
-export function scaffoldClient(slug: string, fields: { name: string; url?: string; playbook: string; description?: string }) {
+export function scaffoldClient(slug: string, fields: { name: string; url?: string; playbook: string; description?: string; draft?: boolean }) {
   const dest = clientDir(slug);
   if (existsSync(dest)) throw new Error(`clients/${slug} already exists`);
   cpSync(join(clientsDir(), "_template"), dest, { recursive: true });
@@ -103,6 +103,7 @@ export function scaffoldClient(slug: string, fields: { name: string; url?: strin
     url: fields.url ?? tmpl.url,
     playbook: fields.playbook,
     description: fields.description ?? tmpl.description,
+    draft: fields.draft ?? false,
   });
   return dest;
 }

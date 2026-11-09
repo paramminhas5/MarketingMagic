@@ -21,6 +21,40 @@ export async function fetchText(url: string, maxChars = 6000): Promise<string> {
   }
 }
 
+export interface RawPage {
+  url: string;
+  ok: boolean;
+  status: number;
+  html: string;
+  ms: number;
+  bytes: number;
+  error?: string;
+}
+
+/** Raw HTML (scripts kept) for audits. Never throws. */
+export async function fetchRaw(url: string, timeoutMs = 15000): Promise<RawPage> {
+  const t0 = Date.now();
+  try {
+    const res = await fetch(url, { headers: { "user-agent": "MarketingMagic-Auditor/0.2" }, signal: AbortSignal.timeout(timeoutMs), redirect: "follow" });
+    const html = await res.text();
+    return { url, ok: res.ok, status: res.status, html, ms: Date.now() - t0, bytes: Buffer.byteLength(html) };
+  } catch (e) {
+    return { url, ok: false, status: 0, html: "", ms: Date.now() - t0, bytes: 0, error: (e as Error).message };
+  }
+}
+
+/** TXT records for a name, or undefined if DNS isn't reachable. */
+export async function txt(name: string): Promise<string[] | undefined> {
+  try {
+    const { resolveTxt } = await import("node:dns/promises");
+    const recs = await resolveTxt(name);
+    return recs.map((r) => r.join(""));
+  } catch (e) {
+    const code = (e as NodeJS.ErrnoException).code;
+    return code === "ENODATA" || code === "ENOTFOUND" ? [] : undefined;
+  }
+}
+
 // ---------------------------------------------------------------- Meta Graph API
 
 const GRAPH = "https://graph.facebook.com/v23.0";

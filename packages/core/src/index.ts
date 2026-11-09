@@ -6,6 +6,10 @@ export * from "./product.ts";
 export * from "./prompt.ts";
 export * from "./playbooks.ts";
 export * from "./rules.ts";
+export * from "./benchmarks.ts";
+export * from "./stats.ts";
+export * from "./cron.ts";
+export * from "./gate.ts";
 export * as tools from "./tools.ts";
 export { z } from "zod";
 
@@ -43,7 +47,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { writeFile } from "./workspace.ts";
 import type { z as Z } from "zod";
 
-export type DocKind = "market-brief" | "strategy";
+export type DocKind = "market-brief" | "strategy" | "readiness" | "test-plan";
 
 export async function saveDoc(ctx: Ctx, kind: DocKind, data: unknown, markdown: string) {
   writeFile(ctx.path("research", `${kind}.json`), JSON.stringify(data, null, 2));

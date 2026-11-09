@@ -114,5 +114,108 @@ assert.equal(decisions.find((d) => d.entityId === "ad1")?.action, "pause");
 assert.equal(decisions.find((d) => d.entityId === "ad2")?.action, "scale");
 console.log("✓ optimiser rules");
 
+// ---------------------------------------------------------------- readiness gate
+const { writeFileSync: wf, mkdirSync: md } = await import("node:fs");
+md(join(root, "clients/acme/inputs/auditor"), { recursive: true });
+wf(
+  join(root, "clients/acme/inputs/auditor/home.html"),
+  `<html><script>fbq('init','123');fbq('track','PageView')</script><form><input type="email" name="email"/><label>How did you hear about us?</label><textarea name="hdyhau"></textarea></form><a href="https://wa.me/91999">WhatsApp</a></html>`,
+);
+let audit = await runOne("auditor", "acme", { offline: true });
+assert.equal(audit.result.status, "done");
+let gate = core.readinessGate(core.makeCtx("media-buyer", "acme"), "spend");
+assert.equal(gate.open, false, "spend locked before approvals");
+assert.ok(gate.reasons.some((r) => r.includes("Strategy approved")));
+console.log(`✓ auditor locks spend: ${gate.reasons.length} blockers`);
+
+// approve strategy + machine, wire the lead endpoint, re-audit
+const store = core.openStore("acme");
+for (const a of await store.list<Asset>("assets", (x) => x.kind === "strategy" || x.kind === "machine")) {
+  await store.update<Asset>("assets", a.id, { approval: { ...a.approval, status: "approved", at: new Date().toISOString() } });
+}
+process.env.MM_LEAD_ENDPOINT = "https://example.test/lead";
+audit = await runOne("auditor", "acme", { offline: true });
+gate = core.readinessGate(core.makeCtx("media-buyer", "acme"), "spend");
+assert.equal(gate.open, true, `spend unlocked once blockers pass: ${gate.reasons.join("; ")}`);
+const readiness = JSON.parse(readFileSync(join(root, "clients/acme/research/readiness.json"), "utf8"));
+assert.ok(readiness.checks.find((c: { id: string }) => c.id === "capture.hdyhau").status === "pass");
+assert.ok(existsSync(join(root, "clients/acme/out/opening-playbook.md")));
+console.log(`✓ auditor unlocks spend at ${readiness.score}/100`);
+
+// attestation turns an unknown into a pass
+const YAML = (await import("yaml")).default;
+const cy = YAML.parse(readFileSync(join(root, "clients/acme/client.yaml"), "utf8"));
+cy.audit = { ...(cy.audit ?? {}), attest: { "tracking.capi": "server events live via Shopify" } };
+wf(join(root, "clients/acme/client.yaml"), YAML.stringify(cy));
+await runOne("auditor", "acme", { offline: true });
+const r2 = JSON.parse(readFileSync(join(root, "clients/acme/research/readiness.json"), "utf8"));
+assert.equal(r2.checks.find((c: { id: string }) => c.id === "tracking.capi").status, "pass");
+console.log("✓ attestation respected");
+
+// ---------------------------------------------------------------- planner
+const plan = await runOne("planner", "acme", {});
+assert.equal(plan.result.status, "done");
+const tp = JSON.parse(readFileSync(join(root, "clients/acme/research/test-plan.json"), "utf8"));
+assert.ok(tp.scenarios.length >= 3 && ["test", "focus", "amplify_only"].includes(tp.recommendation.mode));
+const capacity = core.testCapacity({ budget: 9000, costPerResult: 100 });
+assert.equal(capacity.armsTestable, 3);
+console.log(`✓ planner: ${tp.recommendation.mode}, ${tp.recommendation.armsThisMonth} arms`);
+
+// ---------------------------------------------------------------- stats + cron
+const pb = core.probBestCost([{ id: "a", spend: 3000, results: 30 }, { id: "b", spend: 3000, results: 12 }]);
+assert.ok(pb.a > 0.95, `clear winner detected (${pb.a})`);
+assert.equal(core.verdict(pb.a, 30), "winner");
+assert.equal(core.verdict(0.7, 5), "too_early");
+const monday = new Date("2026-11-09T05:00:00Z"); // 10:30 IST Monday
+assert.equal(core.isDue("13 9 * * 1", new Date("2026-11-02T05:00:00Z"), monday), true);
+assert.equal(core.isDue("13 9 * * 1", new Date("2026-11-09T04:00:00Z"), monday), false);
+assert.equal(core.isDue("on-demand", undefined, monday), false);
+console.log("✓ probability-best and cron");
+
+// ---------------------------------------------------------------- autopilot
+const { tick } = await import("../src/autopilot.ts");
+const items = await tick({ clients: ["acme"], dryRun: true, now: new Date(Date.now() + 8 * 864e5) });
+assert.ok(items.some((i) => i.product === "studio" && i.action === "run"), "studio due after a week once approved");
+console.log(`✓ tick: ${items.filter((i) => i.action === "run").map((i) => i.product).join(", ")} due`);
+
+// ---------------------------------------------------------------- proof
+const proofRun = await runOne("proof", "acme", {});
+assert.equal(proofRun.result.status, "done");
+const pr = JSON.parse(readFileSync(join(root, `clients/acme/out/proof/${core.today()}.json`), "utf8"));
+assert.ok(pr.commitments.some((c: { metric: string }) => c.metric === "ad_concepts"), "commitments derived from caps");
+console.log(`✓ proof: ${(proofRun.result as { summary: string }).summary}`);
+
+// ---------------------------------------------------------------- intake (URL-only client)
+core.scaffoldClient("newco", { name: "newco", url: "http://localhost:1", playbook: "consumer", draft: true });
+const ob = await onboard("newco", {});
+assert.equal(ob.at(-1)!.product, "intake");
+await finishPendingFor("newco", "intake", {
+  name: "NewCo",
+  playbook: "b2b_service",
+  description: "NewCo builds payroll software for Indian startups.",
+  geo: ["India"],
+  icp: "Founders of 10-100 person startups",
+  offers: [{ name: "Payroll", description: "Monthly payroll" }],
+  competitors: [],
+  voices: [{ id: "asha", name: "Asha", role: "Founder" }],
+  tone: "Plain",
+  colors: [],
+  currency: "INR",
+  constraints: [],
+  auditPages: ["pricing"],
+  questions: ["What does it cost?"],
+});
+const nc = core.loadClient("newco");
+assert.equal(nc.draft, false);
+assert.equal(nc.playbook, "b2b_service");
+assert.deepEqual(nc.audit.pages, ["pricing"]);
+console.log("✓ intake fills a URL-only client");
+
+async function finishPendingFor(slug: string, id: string, answer: unknown) {
+  const files = core.pendingFiles(slug).filter((f) => f.includes(`/${id}-`));
+  assert.equal(files.length, 1);
+  return core.submitPending((pid) => product(pid), files[0], answer);
+}
+
 const runs = JSON.parse(readFileSync(join(root, "clients/acme/data/runs.json"), "utf8"));
 console.log(`✓ ${runs.length} runs logged\n\nSMOKE TEST PASSED (${root})`);

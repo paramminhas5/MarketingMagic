@@ -5,10 +5,10 @@ description: Onboard a new client into Marketing Magic, or re-run research for a
 
 # Onboard a client
 
-1. **Create the workspace** (skip if it exists):
-   `npx mm new <slug> --name "<Name>" --url <https://...> --playbook consumer|b2b_service|creator_media`
-   Fill `clients/<slug>/client.yaml` with what you know: offers, prices, geo, ICP, competitors, voices, brand rules,
-   constraints. Ask the user only for what you can't find.
+1. **Create the workspace** (skip if it exists): `npx mm new <slug> --url <https://...>`
+   Intake will fill client.yaml from the site on the first onboard step. If the client's code is available, clone it
+   and set `audit.codebase` in client.yaml so Intake and the Auditor can read it. If the site isn't reachable from
+   the engine, save its main pages into `clients/<slug>/inputs/intake/` and `inputs/auditor/`.
 
 2. **Gather evidence** into `clients/<slug>/inputs/scout/` (one file per source, JSON or Markdown, keep URLs):
    - Ahrefs: site-explorer-metrics, organic-keywords, organic-competitors for the client URL
@@ -18,12 +18,12 @@ description: Onboard a new client into Marketing Magic, or re-run research for a
    - Web search: reviews, Reddit and community threads; copy verbatim customer phrases with links
 
 3. **Run the pipeline:** `npx mm onboard --client <slug> --objective "<goal>" --monthly <budget> --daily <cap>`
-   It runs Scout → Strategist → Architect and resumes from the first missing step. With no API key each step
+   It runs Intake → Scout → Strategist → Architect → Auditor → Planner and resumes from the first missing step. With no API key each step
    pends: answer the pending file (you are the model), `npx mm submit <pending> <answer.json>`, then run
    `npx mm onboard` again until the machine is written.
 
-4. **Hand over:** show `clients/<slug>/research/market-brief.md`, `research/strategy.md`, `machine.yaml` and
-   `out/schedules.md`. The strategy and machine wait in `npx mm approvals`. After approval, offer to create the
-   scheduled tasks listed in `out/schedules.md`.
+4. **Hand over:** show `research/market-brief.md`, `research/strategy.md`, `machine.yaml`, `research/readiness.md`,
+   `out/opening-playbook.md` and `research/test-plan.md`, plus `out/intake-questions.md`. The strategy and machine wait in
+   `npx mm approvals`. The daily autopilot task (`npx mm autopilot`) picks the client up automatically; no new task needed.
 
 Never invent evidence. Anything you could not verify goes in the brief's `unverified` list.

@@ -19,6 +19,10 @@
     "@mm/lifecycle": "*",
     "@mm/lead-desk": "*",
     "@mm/gatekeeper": "*",
-    "@mm/analyst": "*"
+    "@mm/analyst": "*",
+    "@mm/intake": "*",
+    "@mm/auditor": "*",
+    "@mm/planner": "*",
+    "@mm/proof": "*"
   }
 }

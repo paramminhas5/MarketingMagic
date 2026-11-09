@@ -9,7 +9,8 @@ This repo is a multi-client marketing engine. Read README.md for the map.
 - With no ANTHROPIC_API_KEY, runs stop at a thinking step saved in `clients/<slug>/out/pending/`.
   You are the model: read the file, answer `task.prompt` under `task.system` with JSON matching
   `task.jsonSchema`, write it to a file, then `npx mm submit <pending> <answer>`.
-- To onboard a new client use the `mm-onboard` skill.
+- To onboard a new client use the `mm-onboard` skill. To run the machine, `npx mm tick --all` (see `mm-autopilot`).
+- Paid spend and cold email are gated by the Auditor (`npx mm readiness`). Never work around a locked gate; fix the blocker or have a human attest it in client.yaml `audit.attest`.
 
 ## Rules
 - Contracts live in `packages/core/src/schemas.ts`. Change them there; never pass prose between products.

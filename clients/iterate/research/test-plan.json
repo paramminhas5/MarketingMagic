@@ -1,0 +1,58 @@
+{
+  "client": "iterate",
+  "at": "2026-11-09T08:01:42.447Z",
+  "budget": {
+    "monthly": 5000,
+    "dailyCap": 1500,
+    "currency": "INR"
+  },
+  "basis": "scenarios",
+  "scenarios": [
+    {
+      "costPerResult": 500,
+      "resultsPerMonth": 10,
+      "armsTestable": 0,
+      "learningPhaseOk": false
+    },
+    {
+      "costPerResult": 1000,
+      "resultsPerMonth": 5,
+      "armsTestable": 0,
+      "learningPhaseOk": false
+    },
+    {
+      "costPerResult": 2500,
+      "resultsPerMonth": 2,
+      "armsTestable": 0,
+      "learningPhaseOk": false
+    },
+    {
+      "costPerResult": 5000,
+      "resultsPerMonth": 1,
+      "armsTestable": 0,
+      "learningPhaseOk": false
+    },
+    {
+      "costPerResult": 10000,
+      "resultsPerMonth": 0,
+      "armsTestable": 0,
+      "learningPhaseOk": false
+    }
+  ],
+  "recommendation": {
+    "mode": "amplify_only",
+    "armsThisMonth": 0,
+    "motivations": [
+      "invisible-in-ai"
+    ],
+    "dailyPerArm": 0,
+    "daysToDecision": null,
+    "decisionRule": "Call a winner when it has ≥30 results and ≥90% probability of the lowest cost per result (Bayesian). Below that it is 'leading' or 'too early', never a winner.",
+    "killRule": "Pause any ad that spends 2x the target cost with zero results, or runs >1.5x target cost after 3x target spend.",
+    "structure": "No test campaigns. Boost organic winners for 3-4 days each.",
+    "notes": [
+      "At ~2500 INR per result, 5000 buys ~2 results a month: not enough to learn anything statistically. Use paid only to amplify posts that already won organically, and judge it on cost per landing-page click.",
+      "No results yet: these are scenarios, not forecasts. The plan switches to observed costs automatically after 10+ results."
+    ]
+  }
+}

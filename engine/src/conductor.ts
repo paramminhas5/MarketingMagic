@@ -27,18 +27,24 @@ export interface OnboardOptions {
   focus?: string;
 }
 
-/** scout -> strategist -> architect. Resumes from the first missing artefact. */
+/** intake -> scout -> strategist -> architect -> auditor -> planner. Resumes from the first missing artefact. */
 export async function onboard(slug: string, o: OnboardOptions = {}): Promise<StepReport[]> {
   const ctx = makeCtx("scout", slug);
   const has = {
+    intake: !ctx.client.draft,
     scout: existsSync(ctx.path("research", "market-brief.json")),
     strategist: existsSync(ctx.path("research", "strategy.json")),
     architect: existsSync(ctx.path("machine.yaml")),
+    auditor: existsSync(ctx.path("research", "readiness.json")),
+    planner: existsSync(ctx.path("research", "test-plan.json")),
   };
   const inputs: Record<string, unknown> = {
+    intake: {},
     scout: { focus: o.focus },
     strategist: { objective: o.objective, offer: o.offer, budgetNote: o.monthlyPaid ? `${o.monthlyPaid}/month paid` : undefined },
     architect: { monthlyPaid: o.monthlyPaid, dailyCap: o.dailyCap, approvers: o.approvers },
+    auditor: {},
+    planner: {},
   };
   const reports: StepReport[] = [];
   for (const id of ONBOARDING) {
@@ -75,8 +81,10 @@ export async function campaign(slug: string, brief: Brief): Promise<StepReport[]
   const ctx = makeCtx("studio", slug);
   const enabled = new Set(ctx.machine?.products.filter((p) => p.enabled).map((p) => p.id) ?? PRODUCTION);
   const wanted = (brief.products as ProductId[] | undefined) ?? PRODUCTION.filter((id) => enabled.has(id));
+  const plan = existsSync(ctx.path("research", "test-plan.json")) ? JSON.parse(readFileSync(ctx.path("research", "test-plan.json"), "utf8")) : undefined;
+  const plannedCount = plan?.recommendation?.armsThisMonth ? Math.max(3, plan.recommendation.armsThisMonth * 3) : undefined;
   const inputs: Partial<Record<ProductId, unknown>> = {
-    studio: { campaign: brief.campaign, offer: brief.offer, ...brief.studio },
+    studio: { campaign: brief.campaign, offer: brief.offer, ...(plannedCount ? { count: plannedCount } : {}), ...brief.studio },
     voice: { ...brief.voice },
     social: { calendar: brief.calendar },
     search: {},
@@ -93,6 +101,7 @@ export async function campaign(slug: string, brief: Brief): Promise<StepReport[]
   }
   if (brief.pages) reports.push(await runOne("pages", slug, brief.pages));
   reports.push(await runOne("gatekeeper", slug, {}));
+  reports.push(await runOne("auditor", slug, {}));
   return reports;
 }
 

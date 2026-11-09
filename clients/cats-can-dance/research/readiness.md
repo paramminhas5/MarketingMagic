@@ -1,0 +1,84 @@
+# Readiness · cats-can-dance · 2026-11-09
+
+**Score 28/100** · paid spend **locked** · outbound **locked** · previous 28/100
+
+## Blocking
+- Meta pixel sends conversion events: Install the Meta pixel with the real conversion event (RSVP / Lead / Purchase) and verify it in Events Manager. Snippet in out/fixes/meta-pixel.md.
+- Every lead reaches the engine: Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`).
+- Strategy approved by a human: Review research/strategy.md and approve it.
+- Machine and caps approved: Review machine.yaml and approve it.
+
+## tracking
+| | check | severity | evidence | fix |
+|---|---|---|---|---|
+| ✗ | Meta pixel sends conversion events | blocker | No Meta pixel code found on the site or in the codebase. | Install the Meta pixel with the real conversion event (RSVP / Lead / Purchase) and verify it in Events Manager. Snippet in out/fixes/meta-pixel.md. |
+| ✗ | Server-side Conversions API | major | No Conversions API calls found in the codebase. | Send the same conversion event server-side from the RSVP/lead/checkout handler with event_id dedup. Notes in out/fixes/meta-pixel.md. |
+| ✓ | Site analytics installed | minor | Seen in: src/components/SeoVerification.tsx |  |
+
+## capture
+| | check | severity | evidence | fix |
+|---|---|---|---|---|
+| ✗ | 'How did you hear about us' on every high-intent form | major | No 'how did you hear about us' field found on forms. | Add a required free-text field to RSVP, signup, booking and contact forms and pass it to the lead store. Snippet in out/fixes/hdyhau-field.html. |
+| ✓ | Email capture on the site | major | Seen in: site, src/pages/Admin.tsx, src/pages/Blog.tsx, src/pages/BlogPost.tsx… |  |
+| ✓ | WhatsApp entry or opt-in | major | Seen in: src/pages/ArtistPortal.tsx, src/pages/ProductDetail.tsx, src/pages/PromoterDashboard.tsx, src/lib/promoter-auth.ts… |  |
+
+## response
+| | check | severity | evidence | fix |
+|---|---|---|---|---|
+| ✗ | Every lead reaches the engine | blocker | Lead Desk on; lead endpoint not configured; 0 leads in store. | Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`). |
+| ? | Leads acknowledged within 10 minutes | major | No leads yet to measure. | Turn on the instant acknowledgement in lead-intake (RESEND_API_KEY + MM_FROM_EMAIL) and run Lead Desk on events. |
+| ✗ | Hot leads alert a human | minor | MM_ALERT_WEBHOOK not set. | Set MM_ALERT_WEBHOOK (Slack/Zapier/WhatsApp relay). |
+
+## lifecycle
+| | check | severity | evidence | fix |
+|---|---|---|---|---|
+| ✗ | Welcome flow | major | No flow drafted. | Run `mm run lifecycle`, approve, then build it in the sending tool. |
+| ✗ | Pre-event reminder (cuts free-RSVP no-shows) | major | No flow drafted. | Run `mm run lifecycle`, approve, then build it in the sending tool. |
+| ✗ | Post-event 'next one' loop | minor | No flow drafted. | Run `mm run lifecycle`, approve, then build it in the sending tool. |
+
+## conversion
+| | check | severity | evidence | fix |
+|---|---|---|---|---|
+| ✓ | Paid traffic has somewhere to convert | blocker | Site has a capture form. |  |
+| ? | Each ad motivation lands on a matching page | minor | No ads yet. | Run `mm run pages --input '{"motivationId":"<id>",...}'` for the unmatched motivations, or send them to the closest page. |
+| ✓ | Homepage responds fast and light | minor | 229 ms, 172 KB HTML. |  |
+
+## promises
+| | check | severity | evidence | fix |
+|---|---|---|---|---|
+| ✗ | No unkept 'coming soon' promises on money paths | major | src/pages/UserDashboard.tsx: "t-[11px] text-cream/60" Redeemable for merch and tickets — redemption launching soon. /p"<br>src/pages/EventDetail.tsx: "blurb: isTba ? "Announcement coming soon." : undefined,"<br>src/components/Drops.tsx: ": div className="col-span-2 font-display text-ink/60" Pet drops coming soon. /div" | Ship the promised feature or remove the promise from the UI before sending traffic. |
+| ✗ | Known leak: Points redemption: users earn CCD points but the dashboard says 'redem | major | Listed in client.yaml audit.knownIssues. | Points redemption: users earn CCD points but the dashboard says 'redemption launching soon' (README calls it a broken promise). Ship a shop discount at 100 points. |
+| ✗ | Known leak: Curated events link offsite: add /events/curated/:id pages with MusicE | major | Listed in client.yaml audit.knownIssues. | Curated events link offsite: add /events/curated/:id pages with MusicEvent JSON-LD so CCD owns the page, the SEO and the RSVP. |
+| ✗ | Known leak: No 24h pre-event WhatsApp reminder for RSVPs who opted in (phone field | major | Listed in client.yaml audit.knownIssues. | No 24h pre-event WhatsApp reminder for RSVPs who opted in (phone field already collected). |
+| ✗ | Known leak: No attended/check-in flow: post-event pages are dead ends; add 'were y | major | Listed in client.yaml audit.knownIssues. | No attended/check-in flow: post-event pages are dead ends; add 'were you there' + XP. |
+
+## discoverability
+| | check | severity | evidence | fix |
+|---|---|---|---|---|
+| ✓ | llms.txt published | minor | Live at /llms.txt. |  |
+| ✓ | Structured data (JSON-LD) | minor | Seen in: site, src/components/Breadcrumbs.tsx, src/components/SEO.tsx, pages/_document.tsx… |  |
+| ✓ | robots.txt and sitemap | minor | robots.txt found; sitemap found. |  |
+
+## strategy
+| | check | severity | evidence | fix |
+|---|---|---|---|---|
+| ✗ | Strategy approved by a human | blocker | Strategy waiting in `mm approvals`. | Review research/strategy.md and approve it. |
+| ✗ | Machine and caps approved | blocker | machine.yaml waiting in `mm approvals`. | Review machine.yaml and approve it. |
+| ✓ | Daily spend cap set | blocker | Daily cap 700 INR. |  |
+| ✗ | Meta ad account in client.yaml | major | accounts.meta_ad_account not set. | Add accounts.meta_ad_account to client.yaml (act_<id>). |
+| ✗ | Writing samples for Param Minhas | minor | 0 characters in voice/param.md. | Paste 10-20 real posts or messages by Param Minhas into voice/param.md. |
+
+## Evidence sources
+- live: https://catscandance.com
+- live: https://catscandance.com/events
+- live: https://catscandance.com/ccdxsocial
+- live: https://catscandance.com/shop
+- live: https://catscandance.com/for-artists
+- codebase: /home/claude/paramminhas5/ccd-final-next.js/artifacts/cats-can-dance (425 files)
+- engine state
+
+## Fix kit written
+- out/fixes/hdyhau-field.html
+- out/fixes/meta-pixel.md
+
+_Something the Auditor can't see but you've confirmed? Add it under `audit.attest` in client.yaml, e.g. `deliverability.warmup: "warmed since Nov 1"`._

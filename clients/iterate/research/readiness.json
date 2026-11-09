@@ -1,0 +1,363 @@
+{
+  "client": "iterate",
+  "at": "2026-11-09T08:03:42.763Z",
+  "score": 28,
+  "spendUnlocked": false,
+  "outboundUnlocked": false,
+  "blockers": [
+    "LinkedIn Insight Tag with a conversion: Add the LinkedIn Insight Tag site-wide and a conversion for the form submit in Campaign Manager.",
+    "Every lead reaches the engine: Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`).",
+    "Strategy approved by a human: Review research/strategy.md and approve it.",
+    "Machine and caps approved: Review machine.yaml and approve it.",
+    "Separate sending domains for cold email: Buy 2-3 lookalike domains, add them to audit.sendingDomains, and warm them for 2+ weeks."
+  ],
+  "sources": [
+    "live: https://hyperiterate.com",
+    "live: https://hyperiterate.com/contact",
+    "codebase: /home/claude/paramminhas5/iterateblack-next (66 files)",
+    "engine state"
+  ],
+  "checks": [
+    {
+      "id": "tracking.meta_pixel",
+      "category": "tracking",
+      "title": "Meta pixel sends conversion events",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "No Meta pixel code found on the site or in the codebase.",
+      "why": "Ad platforms optimise on the conversion events you send; broad targeting with diverse creative only works when the platform can see results (03-paid-acquisition).",
+      "fix": "Install the Meta pixel with the real conversion event (RSVP / Lead / Purchase) and verify it in Events Manager. Snippet in out/fixes/meta-pixel.md.",
+      "owner": "developer",
+      "fixWith": "out/fixes/meta-pixel.md",
+      "gates": []
+    },
+    {
+      "id": "tracking.linkedin_tag",
+      "category": "tracking",
+      "title": "LinkedIn Insight Tag with a conversion",
+      "severity": "blocker",
+      "status": "fail",
+      "evidence": "No LinkedIn Insight code found on the site or in the codebase.",
+      "why": "Ad platforms optimise on the conversion events you send; broad targeting with diverse creative only works when the platform can see results (03-paid-acquisition).",
+      "fix": "Add the LinkedIn Insight Tag site-wide and a conversion for the form submit in Campaign Manager.",
+      "owner": "developer",
+      "gates": [
+        "spend"
+      ]
+    },
+    {
+      "id": "tracking.capi",
+      "category": "tracking",
+      "title": "Server-side Conversions API",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "No Conversions API calls found in the codebase.",
+      "why": "Server-side events recover conversions browsers drop; secondary sources put it at 20-30% (09-analytics-attribution, directional).",
+      "fix": "Send the same conversion event server-side from the RSVP/lead/checkout handler with event_id dedup. Notes in out/fixes/meta-pixel.md.",
+      "owner": "developer",
+      "fixWith": "out/fixes/meta-pixel.md",
+      "gates": []
+    },
+    {
+      "id": "tracking.analytics",
+      "category": "tracking",
+      "title": "Site analytics installed",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "No analytics script found.",
+      "why": "You can't compare landing page conversion against benchmarks (Unbounce medians, 05-conversion) without sessions.",
+      "fix": "Turn on Vercel Analytics or GA4 (or set the Plausible domain if the code already supports it).",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "capture.hdyhau",
+      "category": "capture",
+      "title": "'How did you hear about us' on every high-intent form",
+      "severity": "major",
+      "status": "fail",
+      "evidence": "No 'how did you hear about us' field found on forms.",
+      "why": "Software credited web search with 79% of conversions; buyers named it 3% of the time. Without self-report the engine defunds what works (Refine Labs, 09-analytics-attribution).",
+      "fix": "Add a required free-text field to RSVP, signup, booking and contact forms and pass it to the lead store. Snippet in out/fixes/hdyhau-field.html.",
+      "owner": "developer",
+      "fixWith": "out/fixes/hdyhau-field.html",
+      "gates": []
+    },
+    {
+      "id": "capture.email",
+      "category": "capture",
+      "title": "Email capture on the site",
+      "severity": "major",
+      "status": "pass",
+      "evidence": "Seen in: site, app/contact/ContactContent.tsx, app/careers/CareersContent.tsx",
+      "why": "Owned lists are the cheapest repeatable conversions and are immune to social reach collapse (00-synthesis, pattern 7).",
+      "fix": "Add an email capture with a clear reason to join (weekly picks, early access).",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "capture.whatsapp",
+      "category": "capture",
+      "title": "WhatsApp entry or opt-in",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "No WhatsApp entry point or opt-in found.",
+      "why": "91% of Indian online adults chat with businesses on WhatsApp weekly; Click-to-WhatsApp funnels cut cost per qualified lead in Meta-cited cases (03, 06).",
+      "fix": "Add a WhatsApp opt-in to forms and a click-to-chat button on landing pages.",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "response.lead_path",
+      "category": "response",
+      "title": "Every lead reaches the engine",
+      "severity": "blocker",
+      "status": "fail",
+      "evidence": "Lead Desk on; lead endpoint not configured; 0 leads in store.",
+      "why": "Speed-to-lead: 19% conversion with an instant reply vs 4% after 3 hours in one India case (vendor-reported, 05-conversion). You can't reply fast to leads you can't see.",
+      "fix": "Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`).",
+      "owner": "developer",
+      "fixWith": "supabase/functions/lead-intake",
+      "gates": [
+        "spend",
+        "outbound"
+      ]
+    },
+    {
+      "id": "response.speed",
+      "category": "response",
+      "title": "Leads acknowledged within 10 minutes",
+      "severity": "major",
+      "status": "unknown",
+      "evidence": "No leads yet to measure.",
+      "why": "Response speed is one of the most controllable conversion levers (05-conversion).",
+      "fix": "Turn on the instant acknowledgement in lead-intake (RESEND_API_KEY + MM_FROM_EMAIL) and run Lead Desk on events.",
+      "owner": "engine",
+      "gates": []
+    },
+    {
+      "id": "response.alerts",
+      "category": "response",
+      "title": "Hot leads alert a human",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "MM_ALERT_WEBHOOK not set.",
+      "why": "High-intent leads need a human reply the same hour.",
+      "fix": "Set MM_ALERT_WEBHOOK (Slack/Zapier/WhatsApp relay).",
+      "owner": "human",
+      "gates": []
+    },
+    {
+      "id": "lifecycle.nurture",
+      "category": "lifecycle",
+      "title": "Lead nurture to booked call",
+      "severity": "major",
+      "status": "fail",
+      "evidence": "No flow drafted.",
+      "why": "Flows return many times the revenue per recipient of one-off campaigns; multi-step beats single-step (Klaviyo 2025, 06-lifecycle-retention).",
+      "fix": "Run `mm run lifecycle`, approve, then build it in the sending tool.",
+      "owner": "engine",
+      "fixWith": "lifecycle",
+      "gates": []
+    },
+    {
+      "id": "lifecycle.no_show",
+      "category": "lifecycle",
+      "title": "No-show recovery",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "No flow drafted.",
+      "why": "Flows return many times the revenue per recipient of one-off campaigns; multi-step beats single-step (Klaviyo 2025, 06-lifecycle-retention).",
+      "fix": "Run `mm run lifecycle`, approve, then build it in the sending tool.",
+      "owner": "engine",
+      "fixWith": "lifecycle",
+      "gates": []
+    },
+    {
+      "id": "conversion.destination",
+      "category": "conversion",
+      "title": "Paid traffic has somewhere to convert",
+      "severity": "blocker",
+      "status": "pass",
+      "evidence": "Site has a capture form.",
+      "why": "Ad-to-page message match and a single clear action are the basics of conversion (05-conversion).",
+      "fix": "Run `mm run pages` for the offer and approve it, or point ads at an existing RSVP/signup page.",
+      "owner": "engine",
+      "fixWith": "pages",
+      "gates": [
+        "spend"
+      ]
+    },
+    {
+      "id": "conversion.message_match",
+      "category": "conversion",
+      "title": "Each ad motivation lands on a matching page",
+      "severity": "minor",
+      "status": "unknown",
+      "evidence": "No ads yet.",
+      "why": "Conversion under ~2.5% usually signals a message-match, offer or speed problem (05-conversion, practitioner consensus).",
+      "fix": "Run `mm run pages --input '{\"motivationId\":\"<id>\",...}'` for the unmatched motivations, or send them to the closest page.",
+      "owner": "engine",
+      "fixWith": "pages",
+      "gates": []
+    },
+    {
+      "id": "conversion.speed",
+      "category": "conversion",
+      "title": "Homepage responds fast and light",
+      "severity": "minor",
+      "status": "pass",
+      "evidence": "490 ms, 60 KB HTML.",
+      "why": "Slow pages lose mobile visitors before the ad's promise lands.",
+      "fix": "Check Core Web Vitals; trim the initial HTML/JS on landing routes.",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "promises.coming_soon",
+      "category": "promises",
+      "title": "No unkept 'coming soon' promises on money paths",
+      "severity": "minor",
+      "status": "pass",
+      "evidence": "None found.",
+      "why": "A promise the product doesn't keep (rewards, redemption, tickets) costs trust exactly where paid traffic lands.",
+      "fix": "Review the listed placeholders; most are harmless empty states.",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "geo.llms_txt",
+      "category": "discoverability",
+      "title": "llms.txt published",
+      "severity": "minor",
+      "status": "pass",
+      "evidence": "Live at /llms.txt.",
+      "why": "AI answers increasingly drive discovery; make it easy for them to describe you correctly (02-inbound-seo-geo).",
+      "fix": "Publish the draft in out/fixes/llms.txt.",
+      "owner": "developer",
+      "fixWith": "out/fixes/llms.txt",
+      "gates": []
+    },
+    {
+      "id": "geo.jsonld",
+      "category": "discoverability",
+      "title": "Structured data (JSON-LD)",
+      "severity": "minor",
+      "status": "pass",
+      "evidence": "Seen in: site, components/site/BreadcrumbSchema.tsx, app/layout.tsx, app/services/page.tsx…",
+      "why": "Structured data helps search and AI answers read events, organisations and FAQs (02-inbound-seo-geo).",
+      "fix": "Add Organization + Event/Service JSON-LD. Template in out/fixes/organization.jsonld.",
+      "owner": "developer",
+      "fixWith": "out/fixes/organization.jsonld",
+      "gates": []
+    },
+    {
+      "id": "geo.robots_sitemap",
+      "category": "discoverability",
+      "title": "robots.txt and sitemap",
+      "severity": "minor",
+      "status": "pass",
+      "evidence": "robots.txt found; sitemap found.",
+      "why": "Crawlers (search and AI) need to find every event and artist page.",
+      "fix": "Generate a sitemap covering events, artists and guides; reference it in robots.txt.",
+      "owner": "developer",
+      "gates": []
+    },
+    {
+      "id": "deliverability.domains",
+      "category": "deliverability",
+      "title": "Separate sending domains for cold email",
+      "severity": "blocker",
+      "status": "fail",
+      "evidence": "No sending domains in client.yaml audit.sendingDomains.",
+      "why": "Cold email from your main domain risks the domain that carries your real mail (04-outbound-leadgen).",
+      "fix": "Buy 2-3 lookalike domains, add them to audit.sendingDomains, and warm them for 2+ weeks.",
+      "owner": "human",
+      "gates": [
+        "outbound"
+      ]
+    },
+    {
+      "id": "deliverability.warmup",
+      "category": "deliverability",
+      "title": "Mailboxes warmed 2+ weeks",
+      "severity": "major",
+      "status": "unknown",
+      "evidence": "The engine can't see warm-up state; attest it in client.yaml audit.attest.",
+      "why": "New mailboxes that start at volume land in spam (04-outbound-leadgen).",
+      "fix": "Warm each mailbox for 2+ weeks, then cap at 15-25 sends per mailbox per day.",
+      "owner": "human",
+      "gates": [
+        "outbound"
+      ]
+    },
+    {
+      "id": "strategy.approved",
+      "category": "strategy",
+      "title": "Strategy approved by a human",
+      "severity": "blocker",
+      "status": "fail",
+      "evidence": "Strategy waiting in `mm approvals`.",
+      "why": "Spend follows strategy; nothing ships on an unapproved positioning.",
+      "fix": "Review research/strategy.md and approve it.",
+      "owner": "human",
+      "gates": [
+        "spend",
+        "outbound"
+      ]
+    },
+    {
+      "id": "strategy.machine_approved",
+      "category": "strategy",
+      "title": "Machine and caps approved",
+      "severity": "blocker",
+      "status": "fail",
+      "evidence": "machine.yaml waiting in `mm approvals`.",
+      "why": "Caps and autonomy levels are what make it safe to let the engine act.",
+      "fix": "Review machine.yaml and approve it.",
+      "owner": "human",
+      "gates": [
+        "spend",
+        "outbound"
+      ]
+    },
+    {
+      "id": "strategy.daily_cap",
+      "category": "strategy",
+      "title": "Daily spend cap set",
+      "severity": "blocker",
+      "status": "pass",
+      "evidence": "Daily cap 1500 INR.",
+      "why": "Hard caps are the guardrail no autonomy level overrides.",
+      "fix": "Set budgets.dailyCap in machine.yaml.",
+      "owner": "human",
+      "gates": [
+        "spend"
+      ]
+    },
+    {
+      "id": "strategy.linkedin_ad_account",
+      "category": "strategy",
+      "title": "Linkedin ad account in client.yaml",
+      "severity": "major",
+      "status": "fail",
+      "evidence": "accounts.linkedin_ad_account not set.",
+      "why": "The Media Buyer can't build paused campaigns or read results without it.",
+      "fix": "Add accounts.linkedin_ad_account to client.yaml.",
+      "owner": "human",
+      "gates": []
+    },
+    {
+      "id": "strategy.voice_corpus.param",
+      "category": "strategy",
+      "title": "Writing samples for Param Minhas",
+      "severity": "minor",
+      "status": "fail",
+      "evidence": "0 characters in voice/param.md.",
+      "why": "Copy that reads as AI underperforms; human-edited, voice-matched copy wins (04, 10).",
+      "fix": "Paste 10-20 real posts or messages by Param Minhas into voice/param.md.",
+      "owner": "human",
+      "gates": []
+    }
+  ]
+}

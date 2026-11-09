@@ -1,69 +1,84 @@
-# Cats Can Dance · Bangalore culture company and India's underground electronic music platform.
-# Source: catscandance.com codebase (paramminhas5/CCD-Final-Next.Js), Nov 2026.
 slug: cats-can-dance
 name: Cats Can Dance
 url: https://catscandance.com
 playbook: creator_media
-description: >
-  Cats Can Dance (CCD) is a Bangalore-based culture company: underground dance music nights,
-  limited apparel and pet streetwear drops, playlists and community, plus catscandance.com, a
-  platform for India's underground electronic music scene (vision: the Resident Advisor of India).
-  The platform serves fans (Discover: events scraped nightly from Skillbox, District, Insider and
-  HighApe plus promoter submissions and editorial picks, personalised recommendations, weekly
-  digest, XP/points), artists (directory, profiles with EPK, gigs, availability calendar and direct
-  booking) and promoters (event submission and listings). It also has city scene pages (Bengaluru,
-  Mumbai, Delhi, Goa), genre guides, global scene origins, a blog, videos and playlists, a
-  Shopify shop, Cats Can Care (a directory of India's top 100 animal welfare NGOs) and CCD School
-  (gamified Ableton Live learning). Events are RSVP-only, capped, curated "Episodes" with 200-400
-  people, mostly free entry with name on the door, at venues including Bar Wild in Indiranagar;
-  plus the CCD x Social series at Social BLR, pet-friendly, with a planned season-finale outdoor
-  show for 2,000+ with a pet runway. Founder Param Minhas has a ~150k-follower social page.
-geo: [Bengaluru, Mumbai, Delhi, Goa, India]
-icp: >
-  Fans: 21-35 year-olds in Indian cities into house, disco, UK garage, breaks, drum & bass, jungle
-  and dub techno (not commercial EDM), who care about music, design and streetwear, often pet
-  owners. Artists: Indian and touring DJs/producers who want gigs, a profile and audience growth.
-  Promoters and venues: people who want the right crowd and better F&B spend. Brands: sponsors
-  (pet, lifestyle) for CCD x Social.
+description: 'Cats Can Dance (CCD) is a Bangalore-based culture company: underground dance music nights, limited apparel and pet streetwear drops, playlists and community, plus catscandance.com, a platform for India''s underground electronic music scene (vision: the Resident Advisor of India). The platform serves fans (Discover: events scraped nightly from Skillbox, District, Insider and HighApe plus promoter submissions and editorial picks, personalised recommendations, weekly digest, XP/points), artists (directory, profiles with EPK, gigs, availability calendar and direct booking) and promoters (event submission and listings). It also has city scene pages (Bengaluru, Mumbai, Delhi, Goa), genre guides, global scene origins, a blog, videos and playlists, a Shopify shop, Cats Can Care (a directory of India''s top 100 animal welfare NGOs) and CCD School (gamified Ableton Live learning). Events are RSVP-only, capped, curated "Episodes" with 200-400 people, mostly free entry with name on the
+  door, at venues including Bar Wild in Indiranagar; plus the CCD x Social series at Social BLR, pet-friendly, with a planned season-finale outdoor show for 2,000+ with a pet runway. Founder Param Minhas has a ~150k-follower social page.
+
+  '
+geo:
+- Bengaluru
+- Mumbai
+- Delhi
+- Goa
+- India
+icp: 'Fans: 21-35 year-olds in Indian cities into house, disco, UK garage, breaks, drum & bass, jungle and dub techno (not commercial EDM), who care about music, design and streetwear, often pet owners. Artists: Indian and touring DJs/producers who want gigs, a profile and audience growth. Promoters and venues: people who want the right crowd and better F&B spend. Brands: sponsors (pet, lifestyle) for CCD x Social.
+
+  '
 offers:
-  - name: Episodes (RSVP)
-    price: Mostly free entry, RSVP-only, capped
-    description: Curated underground dance music nights, 200-400 people, resident and guest selectors.
-  - name: CCD x Social
-    description: Pet-friendly recurring series at Social BLR; season finale planned as a 2,000+ outdoor show with a pet runway.
-  - name: Apparel and pet streetwear drops
-    description: Limited screen-printed streetwear and pet streetwear (cat bandanas, bucket hats), CCD goods; no restocks; Shopify shop.
-  - name: Discover + weekly digest
-    description: India's underground events in one feed with personalised recommendations and a Monday email.
-  - name: Artist profiles and booking
-    description: Claimable artist profiles with EPK, gigs, availability and direct booking requests.
-  - name: Promoter listings
-    description: Promoters submit events to Discover; trusted promoters publish directly.
-  - name: CCD School
-    description: Gamified Ableton Live learning with missions, simulators, XP and streaks.
-  - name: Venue and sponsor partnerships
-    description: CCD brings crowd, lineup, production direction and post-event content; sponsors back CCD x Social.
+- name: Episodes (RSVP)
+  price: Mostly free entry, RSVP-only, capped
+  description: Curated underground dance music nights, 200-400 people, resident and guest selectors.
+- name: CCD x Social
+  description: Pet-friendly recurring series at Social BLR; season finale planned as a 2,000+ outdoor show with a pet runway.
+- name: Apparel and pet streetwear drops
+  description: Limited screen-printed streetwear and pet streetwear (cat bandanas, bucket hats), CCD goods; no restocks; Shopify shop.
+- name: Discover + weekly digest
+  description: India's underground events in one feed with personalised recommendations and a Monday email.
+- name: Artist profiles and booking
+  description: Claimable artist profiles with EPK, gigs, availability and direct booking requests.
+- name: Promoter listings
+  description: Promoters submit events to Discover; trusted promoters publish directly.
+- name: CCD School
+  description: Gamified Ableton Live learning with missions, simulators, XP and streaks.
+- name: Venue and sponsor partnerships
+  description: CCD brings crowd, lineup, production direction and post-event content; sponsors back CCD x Social.
 competitors: []
 voices:
-  - id: param
-    name: Param Minhas
-    role: Founder of Cats Can Dance; producer/DJ (Merman); co-founder of SoleSearch
-    channels: [instagram, linkedin]
-    rules:
-      - Plain and straightforward; sounds like Param, not over the top
-      - Never use em dashes
-      - Cut any line that exists to sound good rather than say something
+- id: param
+  name: Param Minhas
+  role: Founder of Cats Can Dance; producer/DJ (Merman); co-founder of SoleSearch
+  channels:
+  - instagram
+  - linkedin
+  rules:
+  - Plain and straightforward; sounds like Param, not over the top
+  - Never use em dashes
+  - Cut any line that exists to sound good rather than say something
 brand:
   tone: Underground, music-first, playful and dry; brutalist; no commercial EDM energy
   rules:
-    - Visual identity is a brutalist isometric cat world; mascot is a black line-art cat in a top hat, mid-dance
-    - Genres are house, disco, UK garage, breaks, drum & bass, jungle and dub techno; never sell it as commercial EDM or top-40
-    - Drops are limited with no restocks; never imply otherwise
-    - Never use em dashes in copy
-  banned: [EDM banger, party animals, lit]
-  colors: ["#1f3bff", "#b6ff00", "#ff2bd6", "#111111", "#f4efe1"]
+  - Visual identity is a brutalist isometric cat world; mascot is a black line-art cat in a top hat, mid-dance
+  - Genres are house, disco, UK garage, breaks, drum & bass, jungle and dub techno; never sell it as commercial EDM or top-40
+  - Drops are limited with no restocks; never imply otherwise
+  - Never use em dashes in copy
+  banned:
+  - EDM banger
+  - party animals
+  - lit
+  colors:
+  - '#1f3bff'
+  - '#b6ff00'
+  - '#ff2bd6'
+  - '#111111'
+  - '#f4efe1'
 accounts: {}
 constraints:
-  - Episodes are RSVP-only and capped; scarcity is real, don't fake it
-  - Pet welfare must be visibly handled for anything pet-friendly
+- Episodes are RSVP-only and capped; scarcity is real, don't fake it
+- Pet welfare must be visibly handled for anything pet-friendly
 currency: INR
+audit:
+  pages:
+  - events
+  - ccdxsocial
+  - shop
+  - for-artists
+  codebase: /home/claude/paramminhas5/ccd-final-next.js/artifacts/cats-can-dance
+  sendingDomains: []
+  knownIssues:
+  - 'Points redemption: users earn CCD points but the dashboard says ''redemption launching soon'' (README calls it a broken promise). Ship a shop discount at 100 points.'
+  - 'Curated events link offsite: add /events/curated/:id pages with MusicEvent JSON-LD so CCD owns the page, the SEO and the RSVP.'
+  - No 24h pre-event WhatsApp reminder for RSVPs who opted in (phone field already collected).
+  - 'No attended/check-in flow: post-event pages are dead ends; add ''were you there'' + XP.'
+  attest: {}
+draft: false

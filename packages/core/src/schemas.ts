@@ -13,6 +13,9 @@ export type Autonomy = z.infer<typeof Autonomy>;
 export const Confidence = z.enum(["low", "medium", "high"]);
 
 export const PRODUCT_IDS = [
+  "intake",
+  "auditor",
+  "planner",
   "scout",
   "strategist",
   "architect",
@@ -27,6 +30,7 @@ export const PRODUCT_IDS = [
   "lead-desk",
   "gatekeeper",
   "analyst",
+  "proof",
 ] as const;
 export const ProductId = z.enum(PRODUCT_IDS);
 export type ProductId = z.infer<typeof ProductId>;
@@ -66,6 +70,18 @@ export const ClientProfile = z.object({
   accounts: z.record(z.string(), z.string()).default({}),
   constraints: z.array(z.string()).default([]),
   currency: z.string().default("INR"),
+  /** True until Intake has filled the profile from the client's site. */
+  draft: z.boolean().default(false),
+  /** What the Auditor inspects. */
+  audit: z
+    .object({
+      pages: z.array(z.string()).default([]).describe("Extra URLs to audit besides the homepage (event page, pricing, contact)"),
+      codebase: z.string().optional().describe("Local path to the site's source code, scanned when the live site can't be fetched"),
+      sendingDomains: z.array(z.string()).default([]).describe("Domains used for outbound email (SPF/DMARC checked)"),
+      knownIssues: z.array(z.string()).default([]).describe("Leaks the team already knows about"),
+      attest: z.record(z.string(), z.string()).default({}).describe("checkId -> note: a human confirms a check passes when the Auditor can't see it"),
+    })
+    .default({ pages: [], sendingDomains: [], knownIssues: [], attest: {} }),
 });
 export type ClientProfile = z.infer<typeof ClientProfile>;
 
@@ -176,6 +192,16 @@ export const Machine = z.object({
   approvers: z.array(z.string()),
   kpis: z.array(z.object({ name: z.string(), target: z.string() })),
   weeklyRhythm: z.array(z.string()),
+  /** What the engine promises to deliver every period: inputs it controls. Proof reports against these. */
+  commitments: z
+    .array(
+      z.object({
+        metric: z.enum(["ad_concepts", "voice_drafts", "social_posts", "pages", "sequences", "flows", "leads_answered_10min_pct", "audits", "memos"]),
+        target: z.number(),
+        period: z.enum(["week", "month"]),
+      }),
+    )
+    .default([]),
 });
 export type Machine = z.infer<typeof Machine>;
 
@@ -278,6 +304,10 @@ export const Lead = z.object({
   intentScore: z.number().optional(),
   route: z.enum(["hot", "nurture", "disqualify"]).optional(),
   status: z.enum(["new", "contacted", "qualified", "booked", "won", "lost"]).default("new"),
+  /** When the instant acknowledgement went out (lead-intake function) */
+  ackAt: z.string().optional(),
+  /** When a human-quality reply was sent */
+  firstResponseAt: z.string().optional(),
   createdAt: z.string(),
 });
 export type Lead = z.infer<typeof Lead>;
@@ -324,3 +354,35 @@ export const RunLog = z.object({
   createdAt: z.string(),
 });
 export type RunLog = z.infer<typeof RunLog>;
+
+// ---------------------------------------------------------------- readiness (Auditor)
+
+export const CheckStatus = z.enum(["pass", "warn", "fail", "unknown"]);
+export type CheckStatus = z.infer<typeof CheckStatus>;
+
+export const CheckResult = z.object({
+  id: z.string(),
+  category: z.enum(["tracking", "capture", "response", "lifecycle", "conversion", "promises", "discoverability", "deliverability", "strategy"]),
+  title: z.string(),
+  severity: z.enum(["blocker", "major", "minor"]),
+  status: CheckStatus,
+  evidence: z.string(),
+  why: z.string().describe("The research finding that makes this matter"),
+  fix: z.string(),
+  owner: z.enum(["engine", "human", "developer"]),
+  fixWith: z.string().optional().describe("Product or artifact that fixes it"),
+  gates: z.array(z.enum(["spend", "outbound"])).default([]).describe("Which actions this check blocks while failing"),
+});
+export type CheckResult = z.infer<typeof CheckResult>;
+
+export const Readiness = z.object({
+  client: z.string(),
+  at: z.string(),
+  score: z.number().min(0).max(100),
+  spendUnlocked: z.boolean(),
+  outboundUnlocked: z.boolean(),
+  blockers: z.array(z.string()),
+  sources: z.array(z.string()).describe("Where the evidence came from: live URLs, saved pages, codebase"),
+  checks: z.array(CheckResult),
+});
+export type Readiness = z.infer<typeof Readiness>;

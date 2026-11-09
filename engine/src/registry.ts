@@ -1,4 +1,8 @@
 import type { AnyProduct, ProductId } from "@mm/core";
+import intake from "@mm/intake";
+import auditor from "@mm/auditor";
+import planner from "@mm/planner";
+import proof from "@mm/proof";
 import scout from "@mm/scout";
 import strategist from "@mm/strategist";
 import architect from "@mm/architect";
@@ -15,6 +19,9 @@ import gatekeeper from "@mm/gatekeeper";
 import analyst from "@mm/analyst";
 
 export const PRODUCTS: Record<ProductId, AnyProduct> = {
+  intake,
+  auditor,
+  planner,
   scout,
   strategist,
   architect,
@@ -29,6 +36,7 @@ export const PRODUCTS: Record<ProductId, AnyProduct> = {
   "lead-desk": leadDesk,
   gatekeeper,
   analyst,
+  proof,
 };
 
 export function product(id: string): AnyProduct {
@@ -38,5 +46,5 @@ export function product(id: string): AnyProduct {
 }
 
 /** The order products run in during onboarding and campaigns. */
-export const ONBOARDING: ProductId[] = ["scout", "strategist", "architect"];
+export const ONBOARDING: ProductId[] = ["intake", "scout", "strategist", "architect", "auditor", "planner"];
 export const PRODUCTION: ProductId[] = ["studio", "voice", "social", "search", "lifecycle", "hunter"];

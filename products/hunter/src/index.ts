@@ -1,7 +1,7 @@
 // Hunter: signal-based outbound for B2B. It builds segments from intent signals
 // and writes short sequences, but every new sequence is approved and edited by a
 // human before a single email goes out (manually edited copy wins, [04]).
-import { defineProduct, z, Strategy, system, asJson, requireDoc, readInputs, makeAsset, sequenceIssues, writeFile, today, tools, DELIVERABILITY } from "@mm/core";
+import { defineProduct, z, Strategy, system, asJson, requireDoc, readInputs, makeAsset, sequenceIssues, writeFile, today, tools, DELIVERABILITY, readinessGate } from "@mm/core";
 
 const Input = z.object({
   segment: z.string().optional().describe("Focus segment; default: let Hunter pick from signals"),
@@ -79,6 +79,7 @@ export default defineProduct({
 
   async finish(ctx, _input, _ev, answer) {
     const a = Answer.parse(answer);
+    const gate = readinessGate(ctx, "outbound");
     const assets = a.segments.map((s) => {
       const issues = sequenceIssues(s.steps);
       return makeAsset(ctx, "hunter", {
@@ -87,7 +88,7 @@ export default defineProduct({
         title: `${s.name} · ${s.signal}`,
         body: s.steps.map((st, i) => `Step ${i + 1} · day ${st.day} · ${st.channel}${st.subject ? ` · ${st.subject}` : ""}\n${st.body}`).join("\n\n"),
         tags: { segment: s.name },
-        meta: { signal: s.signal, whyNow: s.whyNow, accounts: s.accounts, steps: s.steps, issues, deliverability: DELIVERABILITY },
+        meta: { signal: s.signal, whyNow: s.whyNow, accounts: s.accounts, steps: s.steps, issues, deliverability: DELIVERABILITY, sendingBlocked: !gate.open, gateReasons: gate.reasons },
         approval: { status: "pending", level: "A2" },
       });
     });
@@ -96,6 +97,7 @@ export default defineProduct({
       ctx.path("out", "hunter", `${today()}.md`),
       [
         `# Hunter · ${ctx.client.name} · ${today()}`,
+        gate.open ? "Outbound gate: open." : `**Outbound gate: locked.** Draft and approve now; nothing sends until:\n${gate.reasons.map((r) => `- ${r}`).join("\n")}`,
         `Personalisation rules:\n${a.personalisationRules.map((r) => `- ${r}`).join("\n")}\n\nDo not contact:\n${a.dontContact.map((r) => `- ${r}`).join("\n")}`,
         ...assets.map((s) => `## ${s.title} \`${s.id}\`\nWhy now: ${s.meta.whyNow}\n\nAccounts: ${(s.meta.accounts as string[]).join(", ") || "-"}\n\n${(s.meta.issues as string[]).length ? `**Fix before approval:** ${(s.meta.issues as string[]).join("; ")}\n\n` : ""}${s.body}`),
       ].join("\n\n"),

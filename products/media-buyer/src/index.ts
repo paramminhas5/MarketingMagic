@@ -1,6 +1,6 @@
 // Media Buyer runs paid channels the Andromeda way: broad targeting, many
 // distinct creatives, platform AI for delivery, hard caps, humans approve launches.
-import { defineProduct, z, Asset, MetricRow, Strategy, system, asJson, requireDoc, makeAsset, adDecisions, writeFile, today, tools } from "@mm/core";
+import { defineProduct, z, Asset, MetricRow, Strategy, system, asJson, requireDoc, makeAsset, adDecisions, writeFile, today, tools, readinessGate, probBestCost, verdict } from "@mm/core";
 
 const Input = z.object({
   mode: z.enum(["plan", "optimize"]).default("plan"),
@@ -85,6 +85,16 @@ export default defineProduct({
     if (input.mode === "optimize") {
       if (!input.targetCostPerResult) throw new Error("optimize needs targetCostPerResult");
       const decisions = adDecisions(ev.metrics, input.targetCostPerResult);
+      // Bayesian guard: only scale an ad that is probably the best, not just lucky.
+      const pb = probBestCost(decisions.map((d) => ({ id: d.entityId, spend: d.spend, results: d.results })));
+      for (const d of decisions) {
+        const v = verdict(pb[d.entityId] ?? 0, d.results);
+        (d as typeof d & { probBest?: number }).probBest = pb[d.entityId];
+        if (d.action === "scale" && v !== "winner" && v !== "leading") {
+          d.action = "hold";
+          d.reason += ` (held: P(best)=${((pb[d.entityId] ?? 0) * 100).toFixed(0)}%, not yet convincing)`;
+        }
+      }
       const applied: string[] = [];
       if (tools.hasMeta() && ctx.autonomy !== "A2" && ctx.autonomy !== "A3") {
         for (const d of decisions.filter((x) => x.action === "pause")) {
@@ -99,9 +109,9 @@ export default defineProduct({
       const md = [
         `# Media Buyer · optimise · ${ctx.client.name} · ${today()}`,
         `Target cost per result: ${input.targetCostPerResult} ${ctx.client.currency}. Autonomy: ${ctx.autonomy}. Applied automatically: ${applied.length ? applied.join(", ") : "none (no token or autonomy requires approval)"}.`,
-        `| action | ad | spend | results | cost/result | reason |\n|---|---|---|---|---|---|\n${decisions
+        `| action | ad | spend | results | cost/result | P(best) | reason |\n|---|---|---|---|---|---|---|\n${decisions
           .sort((a, b) => a.action.localeCompare(b.action))
-          .map((d) => `| **${d.action}** | ${d.entityName || d.entityId} | ${d.spend.toFixed(0)} | ${d.results} | ${d.costPerResult?.toFixed(0) ?? "-"} | ${d.reason} |`)
+          .map((d) => `| **${d.action}** | ${d.entityName || d.entityId} | ${d.spend.toFixed(0)} | ${d.results} | ${d.costPerResult?.toFixed(0) ?? "-"} | ${(((d as typeof d & { probBest?: number }).probBest ?? 0) * 100).toFixed(0)}% | ${d.reason} |`)
           .join("\n")}`,
       ].join("\n\n");
       writeFile(ctx.path("out", "media-buyer", `${today()}-optimize.md`), md);
@@ -111,17 +121,20 @@ export default defineProduct({
     const p = Plan.parse(plan);
     const cap = ctx.cap("dailySpend", ctx.machine?.budgets.dailyCap ?? Infinity);
     if (cap && p.dailyBudget > cap) p.dailyBudget = cap;
+    // Readiness gate: no campaign is created while the funnel leaks.
+    const gate = readinessGate(ctx, "spend");
     let created: unknown;
     const account = ctx.client.accounts.meta_ad_account;
-    if (input.createPaused && tools.hasMeta() && account) {
+    if (gate.open && input.createPaused && tools.hasMeta() && account) {
       created = await tools.metaCreatePausedCampaign(account, p.campaignName, input.objective);
     }
+    if (!gate.open) p.launchChecklist.unshift(...gate.reasons.map((r) => `BLOCKED by readiness: ${r}`));
     const asset = makeAsset(ctx, "media-buyer", {
       kind: "campaign_plan",
       channel: "meta",
       title: p.campaignName,
       body: `${p.structure}\nDaily: ${p.dailyBudget} ${ctx.client.currency}\nAudience: ${p.audience}\nExclusions: ${p.exclusions.join(", ")}\nEvent: ${p.conversionEvent}\nTest: ${p.testPlan}`,
-      meta: { ...p, created },
+      meta: { ...p, created, gate },
       approval: { status: "pending", level: "A2" },
     });
     await ctx.store.insert("assets", asset);
@@ -129,8 +142,11 @@ export default defineProduct({
       ctx.path("out", "media-buyer", `${today()}-${input.campaign}-plan.md`),
       `# ${p.campaignName}\n\n${asset.body}\n\nAds: ${p.adIds.join(", ")}\n\n## Launch checklist\n${p.launchChecklist.map((c) => `- [ ] ${c}`).join("\n")}\n`,
     );
-    return { plan: p, created };
+    return { plan: p, created, gate };
   },
 
-  summarize: (o) => (o.decisions ? `${o.decisions.length} ad decisions, ${o.applied?.length ?? 0} applied` : `plan ${o.plan?.campaignName} @ ${o.plan?.dailyBudget}/day`),
+  summarize: (o) =>
+    o.decisions
+      ? `${o.decisions.length} ad decisions, ${o.applied?.length ?? 0} applied`
+      : `plan ${o.plan?.campaignName} @ ${o.plan?.dailyBudget}/day${o.gate && !o.gate.open ? " · BLOCKED by readiness gate" : ""}`,
 });
