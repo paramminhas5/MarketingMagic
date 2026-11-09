@@ -44,7 +44,10 @@ export default defineProduct({
     connectors: ["Gmail (reply)", "Google Calendar (book)", "Apollo (enrich)", "WhatsApp BSP (when connected)"],
     apis: ["MM_ALERT_WEBHOOK"],
     skill: {
-      gather: ["New leads arrive via the lead-intake function into the store; or `mm import lead <file>`."],
+      gather: [
+        "If client.accounts.leads_feed is set (e.g. supabase://<project>/marketing.leads_feed), pull rows from the last 8 days with the Supabase connector (execute_sql: select * from marketing.leads_feed where created_at > now() - interval '8 days'), save them to inputs/lead-desk/feed.json and run `mm import feed clients/<slug>/inputs/lead-desk/feed.json`. Converted rows (tickets, RSVPs) import as won; only open enquiries need a reply.",
+        "Otherwise leads arrive via the lead-intake function into the store, or `mm import lead <file>`.",
+      ],
       act: [
         "Run `mm run lead-desk --client <slug>`.",
         "Hot leads: send the drafted reply now (Gmail) and offer two calendar slots (Google Calendar suggest_time). Nurture: hand to Lifecycle. Anything about pricing or proposals: hand to a human.",

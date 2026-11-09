@@ -1,7 +1,7 @@
 {
   "client": "cats-can-dance",
   "window": {
-    "since": "2026-11-02T08:03:41.181Z",
+    "since": "2026-11-02T11:21:29.142Z",
     "days": 7
   },
   "commitments": [
@@ -51,7 +51,7 @@
       "metric": "audits",
       "target": 1,
       "period": "week",
-      "delivered": 3,
+      "delivered": 8,
       "status": "met"
     },
     {
@@ -64,8 +64,8 @@
   ],
   "leaks": {
     "fixed": [],
-    "open": 19,
-    "score": 28,
+    "open": 16,
+    "score": 34,
     "previousScore": 28,
     "spendUnlocked": false
   },

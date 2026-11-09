@@ -8,3 +8,5 @@ node_modules/
 clients/*/data/
 clients/*/out/pending/
 !clients/_template/**
+# lead data is personal: never commit it
+clients/*/inputs/lead-desk/

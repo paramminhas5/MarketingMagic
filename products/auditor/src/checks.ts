@@ -14,7 +14,7 @@ const flowApproved = (assets: Asset[], re: RegExp) => {
   };
 };
 
-const PROMISE_RE = /(coming soon|launching soon|available soon|stay tuned)/i;
+const PROMISE_RE = /(coming soon|launching soon|available soon|stay tuned|poster coming|placeholder ·)/i;
 const PROMISE_CRITICAL = /(redeem|redemption|points|reward|refund|ticket|payment|checkout|book)/i;
 
 export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
@@ -46,13 +46,20 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
     const needed = paid && platforms[k];
     if (!needed && k !== "meta") continue;
     const hits = seen(ev, TAGS[k].re);
+    // Code that only switches on with an env var isn't live until someone sets it.
+    const envGate = /NEXT_PUBLIC_[A-Z_]*(PIXEL|INSIGHT|GTAG|ADS)[A-Z_]*/.exec([...ev.code.corpus.values()].find((c) => TAGS[k].re.test(c)) ?? "")?.[0];
+    const onlyInCode = hits.length > 0 && !hits.includes("site");
+    const status = onlyInCode && envGate ? "unknown" : unknownOr(hits, "");
     checks.push({
       id: `tracking.${k === "meta" ? "meta_pixel" : `${k}_tag`}`,
       category: "tracking",
       title: TAGS[k].title,
       severity: needed ? "blocker" : "minor",
-      status: unknownOr(hits, ""),
-      evidence: where(hits) || (haveWebOrCode ? `No ${TAGS[k].title.split(" ").slice(0, 2).join(" ")} code found on the site or in the codebase.` : "No site or code evidence available."),
+      status,
+      evidence:
+        onlyInCode && envGate
+          ? `In the code (${hits.slice(0, 2).join(", ")}) but switched on by ${envGate}. Set it in the host's env, deploy, then attest \`tracking.${k === "meta" ? "meta_pixel" : `${k}_tag`}\` once it shows in the platform's event tester.`
+          : where(hits) || (haveWebOrCode ? `No ${TAGS[k].title.split(" ").slice(0, 2).join(" ")} code found on the site or in the codebase.` : "No site or code evidence available."),
       why: "Ad platforms optimise on the conversion events you send; broad targeting with diverse creative only works when the platform can see results (03-paid-acquisition).",
       fix: TAGS[k].fix,
       owner: "developer",
@@ -147,7 +154,9 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
       status: leadDeskOn && leadsFlow ? "pass" : "fail",
       evidence: `Lead Desk ${leadDeskOn ? "on" : "off"}; lead endpoint ${ev.engine.env.leadEndpoint ? "configured" : "not configured"}; ${ev.engine.leads.length} leads in store.`,
       why: "Speed-to-lead: 19% conversion with an instant reply vs 4% after 3 hours in one India case (vendor-reported, 05-conversion). You can't reply fast to leads you can't see.",
-      fix: "Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`).",
+      fix: ctx.client.accounts.leads_feed
+        ? `Pull the site's conversions from ${ctx.client.accounts.leads_feed} into the engine (\`mm import feed\`, see the Lead Desk skill). Needs the feed to exist and a human OK to read lead data.`
+        : "Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own lead table into the engine (`mm import feed` / `mm import lead`).",
       owner: "developer",
       fixWith: "supabase/functions/lead-intake",
       gates: ["spend", "outbound"],

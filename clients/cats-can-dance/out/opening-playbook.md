@@ -16,13 +16,10 @@ Fix leaks before buying traffic. These recover demand you already have, which ma
 - [ ] **Hot leads alert a human** (minor) · Set MM_ALERT_WEBHOOK (Slack/Zapier/WhatsApp relay).
 - [ ] **Writing samples for Param Minhas** (minor) · Paste 10-20 real posts or messages by Param Minhas into voice/param.md.
 
-## Needs a developer (9)
+## Needs a developer (6)
 - [ ] **Meta pixel sends conversion events** (blocker, blocks spend) · Install the Meta pixel with the real conversion event (RSVP / Lead / Purchase) and verify it in Events Manager. Snippet in out/fixes/meta-pixel.md. → `out/fixes/meta-pixel.md`
-- [ ] **Every lead reaches the engine** (blocker, blocks spend+outbound) · Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own RSVP/lead table into the engine (`mm import lead`). → `supabase/functions/lead-intake`
+- [ ] **Every lead reaches the engine** (blocker, blocks spend+outbound) · Pull the site's conversions from supabase://jybloszaucgqlbkzquqw/marketing.leads_feed into the engine (`mm import feed`, see the Lead Desk skill). Needs the feed to exist and a human OK to read lead data. → `supabase/functions/lead-intake`
 - [ ] **Server-side Conversions API** (major) · Send the same conversion event server-side from the RSVP/lead/checkout handler with event_id dedup. Notes in out/fixes/meta-pixel.md. → `out/fixes/meta-pixel.md`
 - [ ] **'How did you hear about us' on every high-intent form** (major) · Add a required free-text field to RSVP, signup, booking and contact forms and pass it to the lead store. Snippet in out/fixes/hdyhau-field.html. → `out/fixes/hdyhau-field.html`
-- [ ] **No unkept 'coming soon' promises on money paths** (major) · Ship the promised feature or remove the promise from the UI before sending traffic.
-- [ ] **Known leak: Points redemption: users earn CCD points but the dashboard says 'redem** (major) · Points redemption: users earn CCD points but the dashboard says 'redemption launching soon' (README calls it a broken promise). Ship a shop discount at 100 points.
-- [ ] **Known leak: Curated events link offsite: add /events/curated/:id pages with MusicE** (major) · Curated events link offsite: add /events/curated/:id pages with MusicEvent JSON-LD so CCD owns the page, the SEO and the RSVP.
-- [ ] **Known leak: No 24h pre-event WhatsApp reminder for RSVPs who opted in (phone field** (major) · No 24h pre-event WhatsApp reminder for RSVPs who opted in (phone field already collected).
-- [ ] **Known leak: No attended/check-in flow: post-event pages are dead ends; add 'were y** (major) · No attended/check-in flow: post-event pages are dead ends; add 'were you there' + XP.
+- [ ] **Known leak: WhatsApp opt-ins are collected (RSVP, crews) but nothing is ever sent:** (major) · WhatsApp opt-ins are collected (RSVP, crews) but nothing is ever sent: no WhatsApp Business provider is connected, so there are no WhatsApp reminders or recaps.
+- [ ] **No unkept 'coming soon' promises on money paths** (minor) · Review the listed placeholders; most are harmless empty states.

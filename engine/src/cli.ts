@@ -96,6 +96,7 @@ Approvals
 Data
   mm import metrics <file.json>            rows: date, channel, entityId, entityName, spend, impressions, clicks, results, revenue, frequency, assetId?
   mm import lead <file.json>               one lead or an array
+  mm import feed <file.json>               rows from a site's marketing.leads_feed (deduped by id)
   mm skills                                regenerate SKILL.md/README.md for every product
 `;
 
@@ -269,7 +270,33 @@ async function main() {
         const parsed = rows.map((r) => Lead.parse({ id: newId("lead"), client: slug, createdAt: new Date().toISOString(), ...r }));
         await store.insertMany("leads", parsed);
         console.log(`Imported ${parsed.length} leads`);
-      } else throw new Error("mm import metrics|lead <file.json>");
+      } else if (args[0] === "feed") {
+        // Rows shaped like a site's marketing.leads_feed: one per conversion, with how they heard.
+        const existing = new Set((await store.list<Lead>("leads")).map((l) => l.id));
+        const weekAgo = Date.now() - 7 * 864e5;
+        const parsed = rows
+          .filter((r) => r.id && r.email && !existing.has(String(r.id)))
+          .map((r) => {
+            const src = String(r.source ?? "form");
+            const converted = /^ticket_(paid|free)$|^rsvp$/.test(src);
+            const old = Date.parse(r.created_at) < weekAgo;
+            return Lead.parse({
+              id: String(r.id),
+              client: slug,
+              source: src,
+              name: r.name ?? undefined,
+              email: r.email,
+              phone: r.phone ?? r.whatsapp ?? undefined,
+              message: r.message ?? undefined,
+              utm: Object.fromEntries(Object.entries({ ...(r.utm ?? {}), ref: r.ref ?? "" }).filter(([, v]) => v).map(([k, v]) => [k, String(v)])),
+              hdyhauRaw: r.heard_from ?? undefined,
+              status: converted ? "won" : src.startsWith("signup") || old ? "contacted" : "new",
+              createdAt: new Date(r.created_at).toISOString(),
+            });
+          });
+        await store.insertMany("leads", parsed);
+        console.log(`Imported ${parsed.length} new conversions (${rows.length - parsed.length} already in the store or unusable)`);
+      } else throw new Error("mm import metrics|lead|feed <file.json>");
       return;
     }
 
