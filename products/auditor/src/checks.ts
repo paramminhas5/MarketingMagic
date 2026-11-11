@@ -27,6 +27,17 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
   const where = (hits: string[]) => (hits.length ? `Seen in: ${hits.slice(0, 4).join(", ")}${hits.length > 4 ? "…" : ""}` : "");
   const unknownOr = (hits: string[], missing: string) => (hits.length ? "pass" : haveWebOrCode ? "fail" : "unknown") as CheckResult["status"];
   const checks: Check[] = [];
+  // Real code only (no docs or data dumps), and code that isn't on the deployed branch yet only earns a warn.
+  const CODE_ONLY = /^(?!(?:.*\/)?(?:data|docs?|public|fixtures?|__tests__|tests?|e2e)\/)(?!.*\.(?:md|mdx|txt|json|xml|csv|svg|lock|ya?ml)$)/;
+  const judge = (hits: string[], none: string): { status: CheckResult["status"]; evidence: string } => {
+    const live = hits.filter((h) => h === "site" || !ev.code.unshipped.has(h));
+    if (live.length) return { status: "pass", evidence: where(live) };
+    if (hits.length) return { status: "warn", evidence: `Built${ev.code.branch ? ` on branch ${ev.code.branch}` : ""} but not shipped yet: ${hits.slice(0, 3).join(", ")}. Merge and deploy (and apply any migration) to pass.` };
+    return { status: "fail", evidence: none };
+  };
+  // Code files that both send something (email, push, WhatsApp) and match a flow.
+  const SEND_RE = /sendMail|api\.resend\.com|resend\.emails|sendgrid|mailgun|postmark|klaviyo|brevo|mailchimp|nodemailer|webpush|sendNotification|SendEmailCommand|whatsapp.*messages/i;
+  const sendingCode = (re: RegExp) => [...ev.code.corpus].filter(([path, text]) => CODE_ONLY.test(path) && SEND_RE.test(text) && re.test(text)).map(([path]) => path);
 
   // ------------------------------------------------------------ tracking
   // Which ad platforms the strategy actually pays for decides which tags are blockers.
@@ -58,10 +69,10 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
       status,
       evidence:
         onlyInCode && envGate
-          ? `In the code (${hits.slice(0, 2).join(", ")}) but switched on by ${envGate}. Set it in the host's env, deploy, then attest \`tracking.${k === "meta" ? "meta_pixel" : `${k}_tag`}\` once it shows in the platform's event tester.`
+          ? `In the code (${hits.slice(0, 2).join(", ")}) but switched on by ${envGate}. Set it${k === "meta" && ctx.client.accounts.meta_pixel_id ? ` to ${ctx.client.accounts.meta_pixel_id}` : ""} in the host's env, deploy, then attest \`tracking.${k === "meta" ? "meta_pixel" : `${k}_tag`}\` once it shows in the platform's event tester.`
           : where(hits) || (haveWebOrCode ? `No ${TAGS[k].title.split(" ").slice(0, 2).join(" ")} code found on the site or in the codebase.` : "No site or code evidence available."),
       why: "Ad platforms optimise on the conversion events you send; broad targeting with diverse creative only works when the platform can see results (03-paid-acquisition).",
-      fix: TAGS[k].fix,
+      fix: onlyInCode && envGate ? `Set ${envGate}${k === "meta" && ctx.client.accounts.meta_pixel_id ? `=${ctx.client.accounts.meta_pixel_id}` : ""} in the host's env and redeploy.` : TAGS[k].fix,
       owner: "developer",
       fixWith: TAGS[k].fixWith,
       gates: needed ? ["spend"] : [],
@@ -163,6 +174,7 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
     });
   }
   {
+    const leadsFlowing = ev.engine.env.leadEndpoint || ev.engine.leads.length > 0;
     const acked = ev.engine.leads.filter((l) => l.ackAt);
     const mins = acked.map((l) => (Date.parse(l.ackAt!) - Date.parse(l.createdAt)) / 60000).filter((x) => x >= 0);
     const med = median(mins);
@@ -171,8 +183,9 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
       category: "response",
       title: "Leads acknowledged within 10 minutes",
       severity: "major",
-      status: !ev.engine.leads.length ? "unknown" : !acked.length ? "fail" : med <= 10 ? "pass" : "warn",
-      evidence: !ev.engine.leads.length ? "No leads yet to measure." : acked.length ? `Median acknowledgement ${med.toFixed(1)} min across ${acked.length} leads.` : `${ev.engine.leads.length} leads, none with an acknowledgement time.`,
+      // With no lead path there is nothing to time; that gap is already counted once, in "Every lead reaches the engine".
+      status: !ev.engine.leads.length ? (leadsFlowing ? "unknown" : "na") : !acked.length ? "fail" : med <= 10 ? "pass" : "warn",
+      evidence: !ev.engine.leads.length ? (leadsFlowing ? "No leads yet to measure." : "Measured once leads reach the engine.") : acked.length ? `Median acknowledgement ${med.toFixed(1)} min across ${acked.length} leads.` : `${ev.engine.leads.length} leads, none with an acknowledgement time.`,
       why: "Response speed is one of the most controllable conversion levers (05-conversion).",
       fix: "Turn on the instant acknowledgement in lead-intake (RESEND_API_KEY + MM_FROM_EMAIL) and run Lead Desk on events.",
       owner: "engine",
@@ -191,34 +204,38 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
   });
 
   // ------------------------------------------------------------ lifecycle
-  const flowsByPlaybook: Record<string, { id: string; title: string; re: RegExp; severity: CheckResult["severity"] }[]> = {
+  const flowsByPlaybook: Record<string, { id: string; title: string; re: RegExp; code: RegExp; severity: CheckResult["severity"] }[]> = {
     creator_media: [
-      { id: "lifecycle.welcome", title: "Welcome flow", re: /welcome/i, severity: "major" },
-      { id: "lifecycle.reminder", title: "Pre-event reminder (cuts free-RSVP no-shows)", re: /remind|pre[\s-]?event|drop|before/i, severity: "major" },
-      { id: "lifecycle.post_event", title: "Post-event 'next one' loop", re: /post[\s-]?event|next[\s_-]?one|recap|after/i, severity: "minor" },
+      { id: "lifecycle.welcome", title: "Welcome flow", re: /welcome/i, code: /welcome(Mail|_mail|Email|_email)|send[_-]?welcome|kind:\s*["']welcome/i, severity: "major" },
+      { id: "lifecycle.reminder", title: "Pre-event reminder (cuts free-RSVP no-shows)", re: /remind|pre[\s-]?event|drop|before/i, code: /remind|Tomorrow:/, severity: "major" },
+      { id: "lifecycle.post_event", title: "Post-event 'next one' loop", re: /post[\s-]?event|next[\s_-]?one|recap|after/i, code: /thanks? for coming|afterMail|post[_-]?event[_-]?(mail|email)|recap(Mail|_email)/i, severity: "minor" },
     ],
     consumer: [
-      { id: "lifecycle.welcome", title: "Welcome flow", re: /welcome/i, severity: "major" },
-      { id: "lifecycle.cart", title: "Abandoned-cart flow", re: /cart/i, severity: "major" },
-      { id: "lifecycle.back_in_stock", title: "Back-in-stock / drop alert", re: /stock|drop/i, severity: "minor" },
+      { id: "lifecycle.welcome", title: "Welcome flow", re: /welcome/i, code: /welcome(Mail|_mail|Email|_email)|send[_-]?welcome|kind:\s*["']welcome/i, severity: "major" },
+      { id: "lifecycle.cart", title: "Abandoned-cart flow", re: /cart/i, code: /abandon(ed)?[_-]?cart|cart[_-]?(reminder|recovery)/i, severity: "major" },
+      { id: "lifecycle.back_in_stock", title: "Back-in-stock / drop alert", re: /stock|drop/i, code: /back[_-]?in[_-]?stock|restock(ed)?[_-]?(alert|mail)|drop[_-]?alert/i, severity: "minor" },
     ],
     b2b_service: [
-      { id: "lifecycle.nurture", title: "Lead nurture to booked call", re: /nurture|call|follow/i, severity: "major" },
-      { id: "lifecycle.no_show", title: "No-show recovery", re: /no[\s_-]?show/i, severity: "minor" },
+      { id: "lifecycle.nurture", title: "Lead nurture to booked call", re: /nurture|call|follow/i, code: /nurture|follow[_-]?up[_-]?(mail|email)/i, severity: "major" },
+      { id: "lifecycle.no_show", title: "No-show recovery", re: /no[\s_-]?show/i, code: /no[_-]?show[_-]?(mail|email|recovery)/i, severity: "minor" },
     ],
   };
   for (const f of flowsByPlaybook[ctx.client.playbook]) {
+    // A flow counts when the site's own code sends it (best: it runs without anyone), or when an approved flow
+    // exists in the engine for someone to build in their sending tool.
     const st = flowApproved(ev.engine.assets, f.re);
+    const inCode = judge(sendingCode(f.code), "");
+    const status: CheckResult["status"] = inCode.status === "pass" || st.approved ? "pass" : inCode.status === "warn" || st.any ? "warn" : "fail";
     checks.push({
       id: f.id,
       category: "lifecycle",
       title: f.title,
       severity: f.severity,
-      status: st.approved ? "pass" : st.any ? "warn" : "fail",
-      evidence: st.approved ? "Approved flow exists in the engine." : st.any ? "Flow drafted, not approved yet." : "No flow drafted.",
+      status,
+      evidence: inCode.status === "pass" ? `Sent by the site's code. ${inCode.evidence}` : st.approved ? "Approved flow exists in the engine." : inCode.status === "warn" ? inCode.evidence : st.any ? "Flow drafted, not approved yet." : "Not sent by the site and no flow drafted.",
       why: "Flows return many times the revenue per recipient of one-off campaigns; multi-step beats single-step (Klaviyo 2025, 06-lifecycle-retention).",
-      fix: st.any ? "Approve the drafted flow (`mm approvals`) and build it in the sending tool." : "Run `mm run lifecycle`, approve, then build it in the sending tool.",
-      owner: st.any ? "human" : "engine",
+      fix: inCode.status === "warn" ? "Merge and deploy the branch that sends it (apply its migration first)." : st.any ? "Approve the drafted flow (`mm approvals`) and build it in the sending tool." : "Run `mm run lifecycle`, approve, then build it in the sending tool, or have the site send it itself.",
+      owner: inCode.status === "warn" ? "human" : st.any ? "human" : "engine",
       fixWith: "lifecycle",
     });
   }
@@ -251,8 +268,8 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
       category: "conversion",
       title: "Each ad motivation lands on a matching page",
       severity: "minor",
-      status: !ads.length ? "unknown" : unmatched.length === 0 ? "pass" : unmatched.length < adMot.size ? "warn" : "fail",
-      evidence: !ads.length ? "No ads yet." : unmatched.length ? `No matching page for: ${unmatched.join(", ")}.` : "All ad motivations have a matching page.",
+      status: !ads.length ? "na" : unmatched.length === 0 ? "pass" : unmatched.length < adMot.size ? "warn" : "fail",
+      evidence: !ads.length ? "No ads yet. Gatekeeper checks each ad's landing page before it can run." : unmatched.length ? `No matching page for: ${unmatched.join(", ")}.` : "All ad motivations have a matching page.",
       why: "Conversion under ~2.5% usually signals a message-match, offer or speed problem (05-conversion, practitioner consensus).",
       fix: "Run `mm run pages --input '{\"motivationId\":\"<id>\",...}'` for the unmatched motivations, or send them to the closest page.",
       owner: "engine",
@@ -299,19 +316,22 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
       owner: "developer",
     });
   }
-  ctx.client.audit.knownIssues.forEach((issue, i) =>
+  ctx.client.audit.knownIssues.forEach((k, i) => {
+    const issue = typeof k === "string" ? k : k.issue;
+    // With fixedWhen, the issue closes itself once code that proves the fix is shipped.
+    const proof = typeof k === "string" ? null : judge(seen(ev, new RegExp(k.fixedWhen, "i"), { codePathFilter: CODE_ONLY }), "");
     checks.push({
       id: `promises.known_${i + 1}`,
       category: "promises",
       title: `Known leak: ${issue.slice(0, 70)}`,
       severity: "major",
-      status: "fail",
-      evidence: "Listed in client.yaml audit.knownIssues.",
+      status: proof?.status === "pass" ? "pass" : proof?.status === "warn" ? "warn" : "fail",
+      evidence: proof?.status === "pass" ? `Fixed: ${proof.evidence}` : proof?.status === "warn" ? proof.evidence : "Listed in client.yaml audit.knownIssues.",
       why: "Known leaks waste traffic until fixed; fixing them is the most certain win in the plan.",
       fix: issue,
-      owner: "developer",
-    }),
-  );
+      owner: proof?.status === "warn" ? "human" : "developer",
+    });
+  });
 
   // ------------------------------------------------------------ discoverability
   {
@@ -495,14 +515,7 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
   if (haveWebOrCode) {
     const consumer = ctx.client.playbook !== "b2b_service";
     const loop = (c: Omit<Check, "category" | "gates" | "owner"> & { owner?: Check["owner"] }) => checks.push({ owner: "developer", ...c, category: "loops", gates: [] });
-    // Real code only (no docs or data dumps), and code that isn't on the deployed branch yet only earns a warn.
-    const CODE_ONLY = /^(?!data\/|docs?\/)(?!.*\.(md|txt)$)/;
-    const judge = (hits: string[], none: string): { status: CheckResult["status"]; evidence: string } => {
-      const live = hits.filter((h) => h === "site" || !ev.code.unshipped.has(h));
-      if (live.length) return { status: "pass", evidence: where(live) };
-      if (hits.length) return { status: "warn", evidence: `Built${ev.code.branch ? ` on branch ${ev.code.branch}` : ""} but not shipped yet: ${hits.slice(0, 3).join(", ")}. Merge and deploy (and apply any migration) to pass.` };
-      return { status: "fail", evidence: none };
-    };
+
     const ref = seen(ev, /ref(erral)?_code|referred_by|refer[\s-]a[\s-]friend|claim_referral|referral[\s_-]?(program|reward|bonus|points|credit)|invite[\s_-]?(reward|bonus|credit|points)/i, { codePathFilter: CODE_ONLY });
     loop({
       id: "loops.referral",
@@ -569,18 +582,19 @@ export function runChecks(ctx: Ctx, ev: Evidence): CheckResult[] {
 }
 
 const W = { blocker: 3, major: 2, minor: 1 } as const;
-const V = { pass: 1, warn: 0.5, fail: 0, unknown: 0 } as const;
+const V = { pass: 1, warn: 0.5, fail: 0, unknown: 0, na: 0 } as const;
 
 /** Readiness score. Loops checks are scored separately with loopsScore. */
 export function score(all: CheckResult[]): number {
-  const checks = all.filter((c) => c.category !== "loops");
+  // n/a checks don't apply yet, so they neither help nor hurt.
+  const checks = all.filter((c) => c.category !== "loops" && c.status !== "na");
   const tot = checks.reduce((a, c) => a + W[c.severity], 0);
   const got = checks.reduce((a, c) => a + W[c.severity] * V[c.status], 0);
   return tot ? Math.round((100 * got) / tot) : 0;
 }
 
 export function gateOpen(checks: CheckResult[], gate: "spend" | "outbound"): { open: boolean; blockers: CheckResult[] } {
-  const blockers = checks.filter((c) => c.gates.includes(gate) && c.severity === "blocker" && c.status !== "pass" && c.status !== "warn");
+  const blockers = checks.filter((c) => c.gates.includes(gate) && c.severity === "blocker" && c.status !== "pass" && c.status !== "warn" && c.status !== "na");
   return { open: blockers.length === 0, blockers };
 }
 

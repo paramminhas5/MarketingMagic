@@ -88,6 +88,7 @@ mm campaign clients/cats-can-dance/briefs/next-event.yaml   # every enabled prod
 mm cycle --target 250                                         # Lead Desk -> Gatekeeper -> Analyst
 mm readiness                                                  # is spend/outbound unlocked, the loops score, and why not
 mm connect                                                    # what is plugged in, what is missing, the step that fixes each
+mm whatif                                                     # what each open PR is worth, and the path to 100
 mm approvals                                                  # what needs you
 mm approve <id> --final edited.txt                            # your edit trains future drafts
 ```

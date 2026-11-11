@@ -10,7 +10,7 @@ const Input = z.object({
   offline: z.boolean().default(false).describe("Skip live fetches and DNS; use saved pages, codebase and engine state only"),
 });
 
-const icon = { pass: "✓", warn: "!", fail: "✗", unknown: "?" } as const;
+const icon = { pass: "✓", warn: "!", fail: "✗", unknown: "?", na: "·" } as const;
 
 function md(r: Readiness, previous: Readiness | undefined, fixes: string[]): string {
   const prev = new Map(previous?.checks.map((c) => [c.id, c.status]) ?? []);
@@ -58,6 +58,8 @@ export default defineProduct({
         "Run `mm run auditor --client <slug>`.",
         "Share out/opening-playbook.md. Engine-owned fixes can run now; human and developer fixes go to the owner.",
         "Spend and outbound stay locked until blockers pass. A human can attest checks the engine can't see in client.yaml audit.attest.",
+        "If audit.codebase is a git checkout, run `mm whatif --client <slug>`: it scores the site as if each open PR were merged and writes out/whatif.md with the path to 100 (merges first, then each remaining step with what it adds). Share that, not a list of failures.",
+        "When a developer fixes a known issue, give it `fixedWhen` (a regex the fix's shipped code will match) in audit.knownIssues so it closes itself.",
       ],
     },
     evidence: ["05-conversion", "06-lifecycle-retention", "09-analytics-attribution", "04-outbound-leadgen", "02-inbound-seo-geo"],

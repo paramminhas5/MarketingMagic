@@ -53,7 +53,7 @@ export interface Evidence {
 const CODE_EXT = new Set([".ts", ".tsx", ".js", ".jsx", ".mjs", ".html", ".json", ".txt", ".toml", ".sql", ".md", ".css"]);
 const SKIP_DIRS = new Set(["node_modules", ".next", ".git", "dist", "build", ".vercel", ".turbo", "coverage", ".migration-backup", ".cache"]);
 
-function walk(root: string, maxFiles = 4000, maxBytes = 25_000_000): CodeEvidence {
+export function walk(root: string, maxFiles = 4000, maxBytes = 25_000_000, assumeShipped = false): CodeEvidence {
   const corpus = new Map<string, string>();
   const paths: string[] = [];
   let bytes = 0;
@@ -87,7 +87,7 @@ function walk(root: string, maxFiles = 4000, maxBytes = 25_000_000): CodeEvidenc
       }
     }
   }
-  return { root, files: paths.length, corpus, paths, ...unshippedFiles(root) };
+  return { root, files: paths.length, corpus, paths, ...(assumeShipped ? { unshipped: new Set<string>() } : unshippedFiles(root)) };
 }
 
 /** What the checked-out branch has that the default (deployed) branch doesn't, so built-but-unshipped work isn't scored as live. */

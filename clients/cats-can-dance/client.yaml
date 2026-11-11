@@ -63,6 +63,8 @@ accounts:
   leads_feed: supabase://jybloszaucgqlbkzquqw/marketing.leads_feed
   vercel_project: catscandance-v2
   repo: paramminhas5/CatsCanDanceOct2026
+  meta_ad_account: act_1516844853853152
+  meta_pixel_id: "1033536589528805"
 constraints:
 - Episodes are RSVP-only and capped; scarcity is real, don't fake it
 - Pet welfare must be visibly handled for anything pet-friendly
@@ -77,6 +79,7 @@ audit:
   codebase: /home/claude/catscandanceoct2026
   sendingDomains: []
   knownIssues:
-  - 'WhatsApp opt-ins are collected (RSVP, crews) but nothing is ever sent: no WhatsApp Business provider is connected, so there are no WhatsApp reminders or recaps.'
+  - issue: 'WhatsApp opt-ins are collected (RSVP, crews) but nothing is sent on WhatsApp, while the RSVP form promised a day-of reminder. Either send them or stop promising them.'
+    fixedWhen: WhatsApp reminders when they start
   attest: {}
 draft: false

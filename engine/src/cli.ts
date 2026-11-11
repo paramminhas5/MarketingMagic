@@ -83,6 +83,7 @@ Autopilot
   mm autopilot                             the one scheduled-task prompt that runs everything
   mm readiness [--client slug]             is spend / outbound unlocked (and the loops score), and why not
   mm connect [--client slug]               what the machine is plugged into, what's missing, the step that fixes each
+  mm whatif [--client slug] [--pr 27,34]   score the site as if each open PR were merged, then all together
 
 Products (each works alone)
   mm products                              list products and their jobs
@@ -156,6 +157,15 @@ async function main() {
 
     case "autopilot": {
       console.log(`Create ONE scheduled task (daily, e.g. 08:41 Asia/Kolkata) with this prompt:\n\n${autopilotPrompt(repoRoot())}\n\nThe tick reads every client's machine.yaml, so adding a client needs no new task.`);
+      return;
+    }
+
+    case "whatif": {
+      const slug = activeClient(flags.client);
+      const { whatIf } = await import("@mm/auditor/whatif");
+      const r = await whatIf(makeCtx("auditor", slug), { offline: flags.offline === "true", only: flags.pr ? String(flags.pr).split(",").map(Number) : undefined });
+      console.log(r.md);
+      console.log(`\nSaved: ${r.path}`);
       return;
     }
 

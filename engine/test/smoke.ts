@@ -246,5 +246,51 @@ async function finishPendingFor(slug: string, id: string, answer: unknown) {
   console.log(`✓ mm connect lists ${c.items.filter((i) => i.ok === false).length} to-dos`);
 }
 
+// site code: flows the site sends itself, self-closing known issues, n/a checks, and what each open PR is worth
+{
+  const { execFileSync } = await import("node:child_process");
+  const { writeFileSync: wfs, mkdirSync: mk } = await import("node:fs");
+  const g = (cwd: string, ...a: string[]) => execFileSync("git", ["-c", "user.email=t@t", "-c", "user.name=t", "-c", "init.defaultBranch=main", ...a], { cwd, stdio: "pipe" });
+  const bare = join(root, "origin.git"), work = join(root, "work"), site = join(root, "site");
+  mk(bare); g(bare, "init", "-q", "--bare"); mk(join(work, "src", "lib"), { recursive: true });
+  g(work, "init", "-q"); g(work, "remote", "add", "origin", bare);
+  wfs(join(work, "src", "App.tsx"), `export const App = () => <form><input name="email" /><label>WhatsApp (day-of reminder)</label></form>;`);
+  g(work, "add", "-A"); g(work, "commit", "-qm", "site"); g(work, "push", "-q", "origin", "main");
+  g(work, "checkout", "-qb", "grow/mail");
+  wfs(join(work, "src", "lib", "mail.ts"), `import { sendMail } from "./send";\nexport const welcomeMail = (to: string) => sendMail(to, "Welcome", "hi");`);
+  wfs(join(work, "src", "App.tsx"), `export const App = () => <form><input name="email" /><label>WhatsApp (reminders when they start)</label></form>;`);
+  g(work, "add", "-A"); g(work, "commit", "-qm", "mail"); g(work, "push", "-q", "origin", "grow/mail");
+  g(root, "clone", "-q", bare, site); g(site, "remote", "set-head", "origin", "main");
+
+  core.scaffoldClient("sitey", { name: "Sitey", url: "http://localhost:1", playbook: "creator_media" });
+  const sy = YAML.parse(readFileSync(join(root, "clients/sitey/client.yaml"), "utf8"));
+  sy.draft = false;
+  sy.audit = { ...(sy.audit ?? {}), codebase: site, knownIssues: [{ issue: "RSVP promises WhatsApp reminders nobody sends", fixedWhen: "reminders when they start" }] };
+  wf(join(root, "clients/sitey/client.yaml"), YAML.stringify(sy));
+  const audit = async () => { await runOne("auditor", "sitey", { offline: true }); return JSON.parse(readFileSync(join(root, "clients/sitey/research/readiness.json"), "utf8")); };
+  const st = (r: any, id: string) => r.checks.find((c: { id: string }) => c.id === id)?.status;
+
+  let r = await audit();
+  assert.equal(st(r, "lifecycle.welcome"), "fail");
+  assert.equal(st(r, "promises.known_1"), "fail");
+  assert.equal(st(r, "conversion.message_match"), "na", "no ads: message match doesn't apply yet");
+  g(site, "checkout", "-q", "grow/mail");
+  r = await audit();
+  assert.equal(st(r, "lifecycle.welcome"), "warn", "built on a branch counts as not shipped");
+  assert.equal(st(r, "promises.known_1"), "warn");
+  g(site, "checkout", "-q", "main");
+
+  const { whatIf } = await import("../../products/auditor/src/whatif.ts");
+  const w = await whatIf(core.makeCtx("auditor", "sitey"), { offline: true });
+  const pr = w.prs.find((p) => p.ref === "grow/mail");
+  assert.ok(pr, "branch found without GitHub");
+  assert.ok(pr!.flips.some((f) => f.id === "lifecycle.welcome" && f.to === "pass"), "welcome passes once merged");
+  assert.ok(pr!.flips.some((f) => f.id === "promises.known_1" && f.to === "pass"), "known issue closes itself once merged");
+  assert.ok(pr!.readiness > w.base.readiness);
+  assert.match(w.md, /## Path to 100/);
+  assert.equal(execFileSync("git", ["-C", site, "worktree", "list"], { encoding: "utf8" }).trim().split("\n").length, 1, "worktrees cleaned up");
+  console.log(`✓ what-if: merging grow/mail moves readiness ${w.base.readiness} → ${pr!.readiness}`);
+}
+
 const runs = JSON.parse(readFileSync(join(root, "clients/acme/data/runs.json"), "utf8"));
 console.log(`✓ ${runs.length} runs logged\n\nSMOKE TEST PASSED (${root})`);

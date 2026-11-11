@@ -78,7 +78,10 @@ export const ClientProfile = z.object({
       pages: z.array(z.string()).default([]).describe("Extra URLs to audit besides the homepage (event page, pricing, contact)"),
       codebase: z.string().optional().describe("Local path to the site's source code, scanned when the live site can't be fetched"),
       sendingDomains: z.array(z.string()).default([]).describe("Domains used for outbound email (SPF/DMARC checked)"),
-      knownIssues: z.array(z.string()).default([]).describe("Leaks the team already knows about"),
+      knownIssues: z
+        .array(z.union([z.string(), z.object({ issue: z.string(), fixedWhen: z.string().describe("Regex; the issue closes when shipped code matches it") })]))
+        .default([])
+        .describe("Leaks the team already knows about. Give fixedWhen and the Auditor closes the issue itself once the fix is live."),
       attest: z.record(z.string(), z.string()).default({}).describe("checkId -> note: a human confirms a check passes when the Auditor can't see it"),
     })
     .default({ pages: [], sendingDomains: [], knownIssues: [], attest: {} }),
@@ -357,7 +360,7 @@ export type RunLog = z.infer<typeof RunLog>;
 
 // ---------------------------------------------------------------- readiness (Auditor)
 
-export const CheckStatus = z.enum(["pass", "warn", "fail", "unknown"]);
+export const CheckStatus = z.enum(["pass", "warn", "fail", "unknown", "na"]).describe("na: does not apply yet (e.g. no ads to match); left out of the score");
 export type CheckStatus = z.infer<typeof CheckStatus>;
 
 export const CheckResult = z.object({

@@ -22,6 +22,8 @@ Save connector output as JSON/Markdown in `clients/<slug>/inputs/auditor/`. The 
 - Run `mm run auditor --client <slug>`.
 - Share out/opening-playbook.md. Engine-owned fixes can run now; human and developer fixes go to the owner.
 - Spend and outbound stay locked until blockers pass. A human can attest checks the engine can't see in client.yaml audit.attest.
+- If audit.codebase is a git checkout, run `mm whatif --client <slug>`: it scores the site as if each open PR were merged and writes out/whatif.md with the path to 100 (merges first, then each remaining step with what it adds). Share that, not a list of failures.
+- When a developer fixes a known issue, give it `fixedWhen` (a regex the fix's shipped code will match) in audit.knownIssues so it closes itself.
 
 If there is no `ANTHROPIC_API_KEY`, the thinking step is saved to `clients/<slug>/out/pending/auditor-*.json`. Read it, answer `task.prompt` under `task.system` with JSON that matches `task.jsonSchema`, save it, and run `mm submit <pending> <answer.json>`.
 
