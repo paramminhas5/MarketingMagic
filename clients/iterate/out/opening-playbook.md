@@ -4,8 +4,8 @@ Fix leaks before buying traffic. These recover demand you already have, which ma
 
 ## The engine can do now (4)
 - [ ] **Leads acknowledged within 10 minutes** (major) · Turn on the instant acknowledgement in lead-intake (RESEND_API_KEY + MM_FROM_EMAIL) and run Lead Desk on events.
-- [ ] **Lead nurture to booked call** (major) · Run `mm run lifecycle`, approve, then build it in the sending tool. → `lifecycle`
-- [ ] **No-show recovery** (minor) · Run `mm run lifecycle`, approve, then build it in the sending tool. → `lifecycle`
+- [ ] **Lead nurture to booked call** (major) · Run `mm run lifecycle`, approve, then build it in the sending tool, or have the site send it itself. → `lifecycle`
+- [ ] **No-show recovery** (minor) · Run `mm run lifecycle`, approve, then build it in the sending tool, or have the site send it itself. → `lifecycle`
 - [ ] **Each ad motivation lands on a matching page** (minor) · Run `mm run pages --input '{"motivationId":"<id>",...}'` for the unmatched motivations, or send them to the closest page. → `pages`
 
 ## Needs you (7)

@@ -1,6 +1,6 @@
-# Readiness · iterate · 2026-11-09
+# Readiness · iterate · 2026-11-11
 
-**Readiness 28/100** · **Loops 20/100** · paid spend **locked** · outbound **locked** · previous 28/100
+**Readiness 30/100** · **Loops 20/100** · paid spend **locked** · outbound **locked** · previous 28/100
 
 ## Blocking
 - LinkedIn Insight Tag with a conversion: Add the LinkedIn Insight Tag site-wide and a conversion for the form submit in Campaign Manager.
@@ -28,21 +28,21 @@
 | | check | severity | evidence | fix |
 |---|---|---|---|---|
 | ✗ | Every lead reaches the engine | blocker | Lead Desk on; lead endpoint not configured; 0 leads in store. | Deploy supabase/functions/lead-intake and set MM_LEAD_ENDPOINT, then point site forms at it, or sync the site's own lead table into the engine (`mm import feed` / `mm import lead`). |
-| ? | Leads acknowledged within 10 minutes | major | No leads yet to measure. | Turn on the instant acknowledgement in lead-intake (RESEND_API_KEY + MM_FROM_EMAIL) and run Lead Desk on events. |
+| · | Leads acknowledged within 10 minutes | major | Measured once leads reach the engine. | Turn on the instant acknowledgement in lead-intake (RESEND_API_KEY + MM_FROM_EMAIL) and run Lead Desk on events. |
 | ✗ | Hot leads alert a human | minor | MM_ALERT_WEBHOOK not set. | Set MM_ALERT_WEBHOOK (Slack/Zapier/WhatsApp relay). |
 
 ## lifecycle
 | | check | severity | evidence | fix |
 |---|---|---|---|---|
-| ✗ | Lead nurture to booked call | major | No flow drafted. | Run `mm run lifecycle`, approve, then build it in the sending tool. |
-| ✗ | No-show recovery | minor | No flow drafted. | Run `mm run lifecycle`, approve, then build it in the sending tool. |
+| ✗ | Lead nurture to booked call | major | Not sent by the site and no flow drafted. | Run `mm run lifecycle`, approve, then build it in the sending tool, or have the site send it itself. |
+| ✗ | No-show recovery | minor | Not sent by the site and no flow drafted. | Run `mm run lifecycle`, approve, then build it in the sending tool, or have the site send it itself. |
 
 ## conversion
 | | check | severity | evidence | fix |
 |---|---|---|---|---|
 | ✓ | Paid traffic has somewhere to convert | blocker | Site has a capture form. |  |
-| ? | Each ad motivation lands on a matching page | minor | No ads yet. | Run `mm run pages --input '{"motivationId":"<id>",...}'` for the unmatched motivations, or send them to the closest page. |
-| ✓ | Homepage responds fast and light | minor | 821 ms, 60 KB HTML. |  |
+| · | Each ad motivation lands on a matching page | minor | No ads yet. Gatekeeper checks each ad's landing page before it can run. | Run `mm run pages --input '{"motivationId":"<id>",...}'` for the unmatched motivations, or send them to the closest page. |
+| ✓ | Homepage responds fast and light | minor | 1151 ms, 60 KB HTML. |  |
 
 ## promises
 | | check | severity | evidence | fix |
